@@ -100,6 +100,10 @@ export default async function Home() {
           <SquadSection squad={squadData} />
           <NewsSection news={newsData} />
         </div>
+
+        <footer className="max-w-5xl mx-auto px-4 py-6 text-center text-xs text-gray-600">
+          &copy; {new Date().getFullYear()} Russ Green. Unofficial fan site. Not affiliated with Wycombe Wanderers FC.
+        </footer>
       </main>
     </>
   )
