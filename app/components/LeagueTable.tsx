@@ -90,13 +90,14 @@ function formPPG(form: string) {
 
 // Render oldest→newest left-to-right (rightmost = most recent)
 function FormDots({ form }: { form: string }) {
-  if (!form) return <span className="text-gray-600 text-xs">–</span>
+  if (!form) return <span className="text-gray-400 text-xs">–</span>
   return (
-    <div className="flex gap-0.5">
+    <div className="flex gap-0.5" aria-label={`Form: ${form.split('').reverse().map(r => r === 'W' ? 'Win' : r === 'D' ? 'Draw' : 'Loss').join(', ')}`}>
       {form.split('').reverse().map((r, i) => (
         <span
           key={i}
-          className={`w-4 h-4 rounded-full text-white text-[9px] flex items-center justify-center font-bold
+          aria-hidden="true"
+          className={`w-5 h-5 rounded-full text-white text-[9px] flex items-center justify-center font-bold
             ${r === 'W' ? 'bg-green-500' : r === 'D' ? 'bg-amber-400' : 'bg-red-500'}`}
         >
           {r}
@@ -119,9 +120,9 @@ export default function LeagueTable({
 
   if (!standings?.length) {
     return (
-      <section className="bg-[#0e1f35]/90 backdrop-blur-sm rounded-2xl shadow-xl p-4">
+      <section className="bg-[#0e1f35]/90 backdrop-blur-sm rounded-2xl shadow-xl p-4" aria-label="League table">
         <h2 className="font-bold text-lg text-white mb-2">League Table</h2>
-        <p className="text-gray-500 text-sm">No standings data available</p>
+        <p className="text-gray-400 text-sm">No standings data available</p>
       </section>
     )
   }
@@ -158,37 +159,39 @@ export default function LeagueTable({
   const periodLabel = period === 'season' ? 'Season' : period === 'last10' ? 'Last 10' : 'Last 5'
 
   return (
-    <section className="bg-[#0e1f35]/90 backdrop-blur-sm rounded-2xl shadow-xl p-4">
+    <section className="bg-[#0e1f35]/90 backdrop-blur-sm rounded-2xl shadow-xl p-4" aria-label="League table">
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-bold text-lg text-white">League Table</h2>
         {period !== 'season' && (
-          <span className="text-xs text-gray-500 italic">{periodLabel} · all metrics recomputed</span>
+          <span className="text-xs text-gray-400 italic">{periodLabel} · all metrics recomputed</span>
         )}
       </div>
 
       {/* Toggles */}
       <div className="flex flex-col gap-2 mb-4">
-        {/* Period — Season on left, Last 5 on right */}
-        <div className="flex gap-1">
+        {/* Period */}
+        <div className="flex gap-1" role="group" aria-label="Filter by time period">
           {(['season', 'last10', 'last5'] as Period[]).map(p => (
             <button
               key={p}
               onClick={() => setPeriod(p)}
-              className={`flex-1 text-xs py-1.5 px-3 rounded-lg font-medium transition-colors whitespace-nowrap
-                ${period === p ? 'bg-[#009EE0] text-white' : 'bg-[#142843] text-gray-400 hover:bg-[#1a3356]'}`}
+              aria-pressed={period === p}
+              className={`flex-1 text-xs py-1.5 px-3 rounded-lg font-medium transition-colors whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-[#009EE0]
+                ${period === p ? 'bg-[#009EE0] text-white' : 'bg-[#142843] text-gray-300 hover:bg-[#1a3356]'}`}
             >
               {p === 'season' ? 'Season' : p === 'last10' ? 'Last 10' : 'Last 5'}
             </button>
           ))}
         </div>
         {/* View */}
-        <div className="flex gap-1">
+        <div className="flex gap-1" role="group" aria-label="Filter by home or away">
           {(['all', 'home', 'away'] as View[]).map(v => (
             <button
               key={v}
               onClick={() => setView(v)}
-              className={`flex-1 text-xs py-1.5 px-3 rounded-lg font-medium capitalize transition-colors
-                ${view === v ? 'bg-[#002147] text-white border border-[#009EE0]/50' : 'bg-[#142843] text-gray-400 hover:bg-[#1a3356]'}`}
+              aria-pressed={view === v}
+              className={`flex-1 text-xs py-1.5 px-3 rounded-lg font-medium capitalize transition-colors focus:outline-none focus:ring-2 focus:ring-[#009EE0]
+                ${view === v ? 'bg-[#002147] text-white border border-[#009EE0]/50' : 'bg-[#142843] text-gray-300 hover:bg-[#1a3356]'}`}
             >
               {v}
             </button>
@@ -198,43 +201,43 @@ export default function LeagueTable({
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full text-sm" aria-label="League standings">
           <thead>
-            <tr className="text-gray-500 text-xs border-b border-white/10">
-              <th className="text-left pb-2 pr-3 w-6">#</th>
-              <th className="text-left pb-2 pr-6">Team</th>
-              <th className="text-center pb-2 px-3">P</th>
-              <th className="text-center pb-2 px-3">W</th>
-              <th className="text-center pb-2 px-3">D</th>
-              <th className="text-center pb-2 px-3">L</th>
-              <th className="text-center pb-2 px-3">GD</th>
-              <th className="text-center pb-2 px-3 font-semibold">Pts</th>
-              <th className="text-center pb-2 px-3 hidden sm:table-cell">Form</th>
-              <th className="text-center pb-2 pl-3 hidden sm:table-cell">PPG</th>
+            <tr className="text-gray-400 text-xs border-b border-white/10">
+              <th scope="col" className="text-left pb-2 pr-3 w-6">#</th>
+              <th scope="col" className="text-left pb-2 pr-6">Team</th>
+              <th scope="col" className="text-center pb-2 px-3">P</th>
+              <th scope="col" className="text-center pb-2 px-3">W</th>
+              <th scope="col" className="text-center pb-2 px-3">D</th>
+              <th scope="col" className="text-center pb-2 px-3">L</th>
+              <th scope="col" className="text-center pb-2 px-3">GD</th>
+              <th scope="col" className="text-center pb-2 px-3 font-semibold">Pts</th>
+              <th scope="col" className="text-center pb-2 px-3 hidden sm:table-cell">Form</th>
+              <th scope="col" className="text-center pb-2 pl-3 hidden sm:table-cell">PPG</th>
             </tr>
           </thead>
           <tbody>
             {rows.map(s => {
               const isWyc = s.team.id === WYCOMBE_ESPN_ID
-              const gdColor = s.gd > 0 ? 'text-green-400' : s.gd < 0 ? 'text-red-400' : 'text-gray-500'
+              const gdColor = s.gd > 0 ? 'text-green-400' : s.gd < 0 ? 'text-red-400' : 'text-gray-400'
               return (
                 <tr key={s.team.id} className={`border-t border-white/10 ${isWyc ? 'bg-[#009EE0]/10' : ''}`}>
-                  <td className={`py-2.5 pr-3 text-xs ${isWyc ? 'font-bold text-[#009EE0]' : 'text-gray-500'}`}>
+                  <td className={`py-2.5 pr-3 text-xs ${isWyc ? 'font-bold text-[#009EE0]' : 'text-gray-400'}`}>
                     {s.rank}
                   </td>
                   <td className="py-2.5 pr-6">
                     <div className="flex items-center gap-2">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={s.team.logo} alt={s.team.name} className="w-5 h-5 object-contain shrink-0" />
+                      <img src={s.team.logo} alt="" aria-hidden="true" className="w-5 h-5 object-contain shrink-0" />
                       <span className={`truncate max-w-[140px] ${isWyc ? 'font-bold text-[#009EE0]' : 'text-gray-200'}`}>
                         {s.team.name}
                       </span>
                     </div>
                   </td>
-                  <td className="text-center py-2.5 px-3 text-gray-400 text-xs">{s.played}</td>
-                  <td className="text-center py-2.5 px-3 text-gray-400 text-xs">{s.won}</td>
-                  <td className="text-center py-2.5 px-3 text-gray-400 text-xs">{s.drawn}</td>
-                  <td className="text-center py-2.5 px-3 text-gray-400 text-xs">{s.lost}</td>
+                  <td className="text-center py-2.5 px-3 text-gray-300 text-xs">{s.played}</td>
+                  <td className="text-center py-2.5 px-3 text-gray-300 text-xs">{s.won}</td>
+                  <td className="text-center py-2.5 px-3 text-gray-300 text-xs">{s.drawn}</td>
+                  <td className="text-center py-2.5 px-3 text-gray-300 text-xs">{s.lost}</td>
                   <td className={`text-center py-2.5 px-3 text-xs ${gdColor}`}>
                     {s.gd > 0 ? '+' : ''}{s.gd}
                   </td>
@@ -244,7 +247,7 @@ export default function LeagueTable({
                   <td className="text-center py-2.5 px-3 hidden sm:table-cell">
                     <FormDots form={s.form} />
                   </td>
-                  <td className="text-center py-2.5 pl-3 text-xs text-gray-400 hidden sm:table-cell">
+                  <td className="text-center py-2.5 pl-3 text-xs text-gray-300 hidden sm:table-cell">
                     {period === 'season'
                       ? (s.seasonPPG ?? (s.played > 0 ? (s.points / s.played).toFixed(1) : '–'))
                       : formPPG(s.form)}
@@ -258,7 +261,9 @@ export default function LeagueTable({
 
       <button
         onClick={() => setExpanded(e => !e)}
-        className="mt-4 w-full text-center text-sm bg-gradient-to-b from-[#40c4f5] to-[#0077b5] text-white font-semibold py-2 rounded-lg shadow-[0_2px_6px_rgba(0,90,160,0.45),inset_0_1px_0_rgba(255,255,255,0.25)] hover:from-[#55ccff] hover:to-[#0088cc] active:from-[#0077b5] active:to-[#005590] transition-all"
+        aria-expanded={expanded}
+        aria-controls="league-table-body"
+        className="mt-4 w-full text-center text-sm bg-gradient-to-b from-[#40c4f5] to-[#0077b5] text-white font-semibold py-2 rounded-lg shadow-[0_2px_6px_rgba(0,90,160,0.45),inset_0_1px_0_rgba(255,255,255,0.25)] hover:from-[#55ccff] hover:to-[#0088cc] active:from-[#0077b5] active:to-[#005590] transition-all focus:outline-none focus:ring-2 focus:ring-[#009EE0]"
       >
         {expanded ? 'Show less' : `Show full table (${standings.length} teams)`}
       </button>

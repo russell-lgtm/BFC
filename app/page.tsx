@@ -5,6 +5,7 @@ import LeagueTable from './components/LeagueTable'
 import SquadSection from './components/SquadSection'
 import NewsSection from './components/NewsSection'
 import OppositionWatch from './components/OppositionWatch'
+import TextSizeToggle from './components/TextSizeToggle'
 
 export const revalidate = 900
 
@@ -69,20 +70,21 @@ export default async function Home() {
                 alt="Wycombe Wanderers crest"
                 className="w-14 h-14 object-contain shrink-0 drop-shadow-lg"
               />
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <h1 className="text-xl font-bold leading-tight">Wycombe Wanderers</h1>
                 {wycPos && (
                   <p className="text-sm font-medium mt-0.5 flex items-center gap-2 flex-wrap">
                     <span className="text-gray-400 text-xs">League One</span>
                     <span className="text-blue-300 mx-0.5">·</span>
                     <span className="text-white font-bold">{wycPos.rank}{['th','st','nd','rd'][(wycPos.rank % 100 - 20) % 10] || ['th','st','nd','rd'][wycPos.rank % 100] || 'th'}</span>
-                    <span className="text-gray-500 text-xs">P</span><span className="text-gray-200 font-semibold">{wycPos.played}</span>
-                    <span className="text-gray-500 text-xs">Pts</span><span className="text-[#009EE0] font-bold">{wycPos.points}</span>
-                    <span className="text-gray-500 text-xs">GD</span><span className={`font-semibold ${wycPos.gd > 0 ? 'text-green-400' : wycPos.gd < 0 ? 'text-red-400' : 'text-gray-400'}`}>{wycPos.gd > 0 ? '+' : ''}{wycPos.gd}</span>
+                    <span className="text-gray-400 text-xs">P</span><span className="text-gray-200 font-semibold">{wycPos.played}</span>
+                    <span className="text-gray-400 text-xs">Pts</span><span className="text-[#009EE0] font-bold">{wycPos.points}</span>
+                    <span className="text-gray-400 text-xs">GD</span><span className={`font-semibold ${wycPos.gd > 0 ? 'text-green-400' : wycPos.gd < 0 ? 'text-red-400' : 'text-gray-400'}`}>{wycPos.gd > 0 ? '+' : ''}{wycPos.gd}</span>
                   </p>
                 )}
               </div>
             </div>
+            <TextSizeToggle />
           </div>
         </header>
 

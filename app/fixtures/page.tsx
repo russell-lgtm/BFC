@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { getFixtures, getStandings, getStadiumImage, WYCOMBE_ESPN_ID } from '../lib/football'
 import FixturesList from './FixturesList'
+import TextSizeToggle from '../components/TextSizeToggle'
 
 export const revalidate = 900
 
@@ -42,18 +43,19 @@ export default async function FixturesPage() {
                     <span className="text-gray-400 text-xs">League One</span>
                     <span className="text-blue-300 mx-0.5">·</span>
                     <span className="text-white font-bold">{wycPos.rank}{['th','st','nd','rd'][(wycPos.rank % 100 - 20) % 10] || ['th','st','nd','rd'][wycPos.rank % 100] || 'th'}</span>
-                    <span className="text-gray-500 text-xs">P</span><span className="text-gray-200 font-semibold">{wycPos.played}</span>
-                    <span className="text-gray-500 text-xs">Pts</span><span className="text-[#009EE0] font-bold">{wycPos.points}</span>
-                    <span className="text-gray-500 text-xs">GD</span><span className={`font-semibold ${wycPos.gd > 0 ? 'text-green-400' : wycPos.gd < 0 ? 'text-red-400' : 'text-gray-400'}`}>{wycPos.gd > 0 ? '+' : ''}{wycPos.gd}</span>
+                    <span className="text-gray-400 text-xs">P</span><span className="text-gray-200 font-semibold">{wycPos.played}</span>
+                    <span className="text-gray-400 text-xs">Pts</span><span className="text-[#009EE0] font-bold">{wycPos.points}</span>
+                    <span className="text-gray-400 text-xs">GD</span><span className={`font-semibold ${wycPos.gd > 0 ? 'text-green-400' : wycPos.gd < 0 ? 'text-red-400' : 'text-gray-400'}`}>{wycPos.gd > 0 ? '+' : ''}{wycPos.gd}</span>
                   </p>
                 )}
               </div>
             </Link>
 
             <div className="ml-auto flex items-center gap-3">
+              <TextSizeToggle />
               <Link
                 href="/"
-                className="text-sm bg-gradient-to-b from-[#40c4f5] to-[#0077b5] text-white px-3 py-1.5 rounded-lg font-semibold shadow-[0_2px_6px_rgba(0,90,160,0.45),inset_0_1px_0_rgba(255,255,255,0.25)] hover:from-[#55ccff] hover:to-[#0088cc] active:from-[#0077b5] active:to-[#005590] transition-all"
+                className="text-sm bg-gradient-to-b from-[#40c4f5] to-[#0077b5] text-white px-3 py-1.5 rounded-lg font-semibold shadow-[0_2px_6px_rgba(0,90,160,0.45),inset_0_1px_0_rgba(255,255,255,0.25)] hover:from-[#55ccff] hover:to-[#0088cc] active:from-[#0077b5] active:to-[#005590] transition-all focus:outline-none focus:ring-2 focus:ring-[#009EE0]"
               >
                 ← Dashboard
               </Link>

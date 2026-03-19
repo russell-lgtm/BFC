@@ -72,21 +72,22 @@ export default function OppositionWatch({
   const reverseFixture = oppData?.reverseFixture ?? null
 
   return (
-    <section className="bg-[#0e1f35]/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden">
+    <section className="bg-[#0e1f35]/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden" aria-label={`Opposition watch: ${opponent.name}`}>
       {/* Opposition colour top stripe */}
-      <div className="h-1 w-full" style={{ backgroundColor: opp.primary }} />
+      <div className="h-1 w-full" style={{ backgroundColor: opp.primary }} aria-hidden="true" />
 
       <div className="p-4">
         {/* Header */}
         <div className="flex items-center gap-4 mb-5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={opponent.logo} alt={opponent.name} className="w-16 h-16 object-contain drop-shadow-lg shrink-0" />
+          <img src={opponent.logo} alt={`${opponent.name} crest`} className="w-16 h-16 object-contain drop-shadow-lg shrink-0" />
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
               <h2 className="font-bold text-xl text-white leading-tight">{opponent.name}</h2>
               {standing && (
                 <span
                   className="text-xs font-bold px-2 py-0.5 rounded-full border"
+                  aria-label={`${standing.rank}${['th','st','nd','rd'][(standing.rank%100-20)%10] || ['th','st','nd','rd'][standing.rank%100] || 'th'} in the league`}
                   style={{
                     color: accentColor,
                     borderColor: `${accentColor}50`,
@@ -97,11 +98,11 @@ export default function OppositionWatch({
                 </span>
               )}
             </div>
-            <p className="text-sm text-gray-400 mt-0.5">
+            <p className="text-sm text-gray-300 mt-0.5">
               {isHome ? 'Coming to Adams Park' : 'Away fixture'} · {kickoff} · {kickoffTime}
             </p>
             {standing && (
-              <p className="text-xs text-gray-500 mt-0.5">
+              <p className="text-xs text-gray-400 mt-0.5">
                 {standing.played} played · {standing.points} pts · {standing.gd > 0 ? '+' : ''}{standing.gd} GD
               </p>
             )}
@@ -114,18 +115,19 @@ export default function OppositionWatch({
           <div className="space-y-4">
             {/* Form strip */}
             <div>
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
                 Last {form10.length} Results
               </h3>
               {form10.length === 0 ? (
-                <p className="text-gray-600 text-sm">No recent data</p>
+                <p className="text-gray-400 text-sm">No recent data</p>
               ) : (
-                <div className="flex gap-1">
+                <div className="flex gap-1" aria-label={`Form: ${form10.map(f => formResult(f, opponent.id) === 'W' ? 'Win' : formResult(f, opponent.id) === 'D' ? 'Draw' : 'Loss').join(', ')}`}>
                   {form10.map((f, i) => {
                     const r = formResult(f, opponent.id)
                     return (
                       <span
                         key={i}
+                        aria-hidden="true"
                         title={`${f.home.name} ${f.home.score}–${f.away.score} ${f.away.name}`}
                         className={`w-7 h-7 rounded-full text-white text-xs flex items-center justify-center font-bold
                           ${r === 'W' ? 'bg-green-500' : r === 'D' ? 'bg-amber-400' : 'bg-red-500'}`}
@@ -141,20 +143,20 @@ export default function OppositionWatch({
             {/* Stats grid — last 10 */}
             {last10.length > 0 && (
               <div>
-                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
                   Last {last10.length} Games
                 </h3>
                 <div className="grid grid-cols-5 gap-2">
                   {[
-                    { label: 'W', value: wins, color: 'text-green-400' },
-                    { label: 'D', value: draws, color: 'text-amber-400' },
-                    { label: 'L', value: losses, color: 'text-red-400' },
-                    { label: 'GF', value: goalsFor, color: 'text-gray-100' },
-                    { label: 'GA', value: goalsAgainst, color: 'text-gray-100' },
-                  ].map(({ label, value, color }) => (
-                    <div key={label} className="bg-[#142843] rounded-lg py-2 flex flex-col items-center">
-                      <span className={`text-lg font-bold ${color}`}>{value}</span>
-                      <span className="text-xs text-gray-500">{label}</span>
+                    { label: 'W', value: wins, color: 'text-green-400', fullLabel: 'Wins' },
+                    { label: 'D', value: draws, color: 'text-amber-400', fullLabel: 'Draws' },
+                    { label: 'L', value: losses, color: 'text-red-400', fullLabel: 'Losses' },
+                    { label: 'GF', value: goalsFor, color: 'text-gray-100', fullLabel: 'Goals for' },
+                    { label: 'GA', value: goalsAgainst, color: 'text-gray-100', fullLabel: 'Goals against' },
+                  ].map(({ label, value, color, fullLabel }) => (
+                    <div key={label} className="bg-[#142843] rounded-lg py-2 flex flex-col items-center" aria-label={`${fullLabel}: ${value}`}>
+                      <span className={`text-lg font-bold ${color}`} aria-hidden="true">{value}</span>
+                      <span className="text-xs text-gray-400" aria-hidden="true">{label}</span>
                     </div>
                   ))}
                 </div>
@@ -175,16 +177,16 @@ export default function OppositionWatch({
               })
               return (
                 <div>
-                  <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                  <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
                     Reverse Fixture
                   </h3>
-                  <div className="bg-[#142843] rounded-xl p-3 flex items-center justify-between">
+                  <div className="bg-[#142843] rounded-xl p-3 flex items-center justify-between" aria-label={`Reverse fixture on ${matchDate}: ${reverseFixture.home.score}–${reverseFixture.away.score}, Wycombe ${result === 'W' ? 'won' : result === 'L' ? 'lost' : 'drew'}`}>
                     <div className="text-xs text-gray-400">{matchDate} · {wycHome ? 'Home' : 'Away'}</div>
-                    <div className={`text-lg font-bold tabular-nums ${resultColor}`}>
+                    <div className={`text-lg font-bold tabular-nums ${resultColor}`} aria-hidden="true">
                       {reverseFixture.home.score} – {reverseFixture.away.score}
                     </div>
                     {result && (
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${
+                      <span aria-hidden="true" className={`text-xs font-bold px-2 py-0.5 rounded-full border ${
                         result === 'W' ? 'bg-green-500/10 border-green-500/30 text-green-400' :
                         result === 'L' ? 'bg-red-500/10 border-red-500/30 text-red-400' :
                         'bg-amber-400/10 border-amber-400/30 text-amber-400'
@@ -199,28 +201,29 @@ export default function OppositionWatch({
           {/* Right: Top Scorers + Top Assists */}
           <div className="grid grid-cols-2 gap-3 items-start">
             <div>
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
                 Top Scorers
               </h3>
               {!oppData?.topScorers.length ? (
-                <p className="text-gray-600 text-sm">No data available</p>
+                <p className="text-gray-400 text-sm">No data available</p>
               ) : (
                 <div className="space-y-1.5">
                   {oppData.topScorers.map(p => (
-                    <div key={p.id} className="flex items-center gap-2.5 p-2 bg-[#142843]/80 rounded-xl">
+                    <div key={p.id} className="flex items-center gap-2.5 p-2 bg-[#142843]/80 rounded-xl" aria-label={`${p.name}, ${p.goals} goals`}>
                       <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 border"
-                        style={{ backgroundColor: `${accentColor}18`, borderColor: `${accentColor}40` }}>
+                        style={{ backgroundColor: `${accentColor}18`, borderColor: `${accentColor}40` }}
+                        aria-hidden="true">
                         <span className="font-bold text-xs leading-none" style={{ color: accentColor }}>
                           {p.jersey || '?'}
                         </span>
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="text-sm font-medium text-gray-100 truncate">{p.name}</div>
-                        <div className="text-xs text-gray-500">{p.appearances} apps</div>
+                        <div className="text-xs text-gray-400">{p.appearances} apps</div>
                       </div>
-                      <div className="text-right shrink-0">
+                      <div className="text-right shrink-0" aria-hidden="true">
                         <div className="text-base font-bold" style={{ color: accentColor }}>{p.goals}</div>
-                        <div className="text-xs text-gray-600">goals</div>
+                        <div className="text-xs text-gray-400">goals</div>
                       </div>
                     </div>
                   ))}
@@ -229,28 +232,29 @@ export default function OppositionWatch({
             </div>
 
             <div>
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
                 Top Assists
               </h3>
               {!oppData?.topAssists.length ? (
-                <p className="text-gray-600 text-sm">No data available</p>
+                <p className="text-gray-400 text-sm">No data available</p>
               ) : (
                 <div className="space-y-1.5">
                   {oppData.topAssists.map(p => (
-                    <div key={p.id} className="flex items-center gap-2.5 p-2 bg-[#142843]/80 rounded-xl">
+                    <div key={p.id} className="flex items-center gap-2.5 p-2 bg-[#142843]/80 rounded-xl" aria-label={`${p.name}, ${p.assists} assists`}>
                       <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 border"
-                        style={{ backgroundColor: `${accentColor}18`, borderColor: `${accentColor}40` }}>
+                        style={{ backgroundColor: `${accentColor}18`, borderColor: `${accentColor}40` }}
+                        aria-hidden="true">
                         <span className="font-bold text-xs leading-none" style={{ color: accentColor }}>
                           {p.jersey || '?'}
                         </span>
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="text-sm font-medium text-gray-100 truncate">{p.name}</div>
-                        <div className="text-xs text-gray-500">{p.appearances} apps</div>
+                        <div className="text-xs text-gray-400">{p.appearances} apps</div>
                       </div>
-                      <div className="text-right shrink-0">
+                      <div className="text-right shrink-0" aria-hidden="true">
                         <div className="text-base font-bold" style={{ color: accentColor }}>{p.assists}</div>
-                        <div className="text-xs text-gray-600">assists</div>
+                        <div className="text-xs text-gray-400">assists</div>
                       </div>
                     </div>
                   ))}
@@ -263,7 +267,7 @@ export default function OppositionWatch({
         {/* News */}
         {news.length > 0 && (
           <div className="mt-5">
-            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
               Latest News
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -273,11 +277,11 @@ export default function OppositionWatch({
                   href={item.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-2.5 rounded-xl border-2 transition-all group hover:bg-[#142843]"
+                  className="block p-2.5 rounded-xl border-2 transition-all group hover:bg-[#142843] focus:outline-none focus:ring-2 focus:ring-[#009EE0]"
                   style={{ borderColor: `${accentColor}40` }}
                 >
                   {item.type === 'reddit' && (
-                    <span className="text-orange-500 text-sm font-bold mr-1">↑</span>
+                    <span className="text-orange-500 text-sm font-bold mr-1" aria-hidden="true">↑</span>
                   )}
                   <p className="text-sm text-gray-200 group-hover:text-white line-clamp-2 leading-snug">
                     {item.title}
@@ -286,11 +290,11 @@ export default function OppositionWatch({
                     <span className={`text-xs font-semibold px-1.5 py-0.5 rounded-full ${
                       item.type === 'reddit'
                         ? 'bg-orange-500/20 text-orange-400'
-                        : 'bg-white/10 text-gray-400'
+                        : 'bg-white/10 text-gray-300'
                     }`}>
                       {item.source}
                     </span>
-                    <span className="text-xs text-gray-600">{timeAgo(item.pubDate)}</span>
+                    <span className="text-xs text-gray-400">{timeAgo(item.pubDate)}</span>
                   </div>
                 </a>
               ))}
@@ -300,7 +304,7 @@ export default function OppositionWatch({
       </div>
 
       {/* Opposition colour bottom stripe */}
-      <div className="h-1 w-full" style={{ backgroundColor: opp.primary }} />
+      <div className="h-1 w-full" style={{ backgroundColor: opp.primary }} aria-hidden="true" />
     </section>
   )
 }

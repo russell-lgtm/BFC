@@ -39,9 +39,14 @@ function FixtureRow({
 
   const resultColor = result === 'W' ? 'text-green-400' : result === 'L' ? 'text-red-400' : 'text-amber-400'
 
+  const scoreLabel = isFinished && wycScore != null && oppScore != null
+    ? `${fixture.home.name} ${fixture.home.score} - ${fixture.away.score} ${fixture.away.name}, result: ${result === 'W' ? 'Win' : result === 'L' ? 'Loss' : 'Draw'}`
+    : `${fixture.home.name} vs ${fixture.away.name}, ${formatDate(fixture.date)}`
+
   return (
     <div
       ref={anchorRef}
+      aria-label={scoreLabel}
       className={`rounded-xl border px-4 py-3 ${
         isNext
           ? 'border-[#009EE0]/50 bg-[#009EE0]/5 ring-1 ring-[#009EE0]/20'
@@ -54,19 +59,19 @@ function FixtureRow({
         {/* Date / status */}
         <div className="w-28 shrink-0 text-left">
           {isLive ? (
-            <span className="text-green-400 font-bold text-xs animate-pulse">LIVE</span>
+            <span className="text-green-400 font-bold text-xs animate-pulse" role="status" aria-label="Match is live">LIVE</span>
           ) : isPostponed ? (
-            <span className="text-gray-500 text-xs">Postponed</span>
+            <span className="text-gray-400 text-xs">Postponed</span>
           ) : isNext ? (
             <div>
               <div className="text-xs text-[#009EE0] font-medium">Next match</div>
-              <div className="text-xs text-gray-400">{formatDate(fixture.date)}</div>
-              <div className="text-xs text-gray-500">{formatTime(fixture.date)}</div>
+              <div className="text-xs text-gray-300">{formatDate(fixture.date)}</div>
+              <div className="text-xs text-gray-400">{formatTime(fixture.date)}</div>
             </div>
           ) : (
             <div>
-              <div className="text-xs text-gray-400">{formatDate(fixture.date)}</div>
-              {!isFinished && <div className="text-xs text-gray-600">{formatTime(fixture.date)}</div>}
+              <div className="text-xs text-gray-300">{formatDate(fixture.date)}</div>
+              {!isFinished && <div className="text-xs text-gray-400">{formatTime(fixture.date)}</div>}
             </div>
           )}
         </div>
@@ -76,22 +81,22 @@ function FixtureRow({
           <div className={`flex items-center gap-1.5 flex-1 justify-end min-w-0 ${fixture.home.id === WYCOMBE_ESPN_ID ? 'font-bold text-[#009EE0]' : 'text-gray-200'}`}>
             <span className="truncate text-sm">{fixture.home.name}</span>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={fixture.home.logo} alt="" className="w-5 h-5 object-contain shrink-0" />
+            <img src={fixture.home.logo} alt="" aria-hidden="true" className="w-5 h-5 object-contain shrink-0" />
           </div>
 
           <div className="shrink-0 w-16 text-center">
             {isFinished || isLive ? (
-              <span className={`font-bold text-base ${result ? resultColor : 'text-gray-200'}`}>
+              <span className={`font-bold text-base ${result ? resultColor : 'text-gray-200'}`} aria-hidden="true">
                 {fixture.home.score} – {fixture.away.score}
               </span>
             ) : (
-              <span className="text-gray-500 text-sm font-medium">vs</span>
+              <span className="text-gray-400 text-sm font-medium">vs</span>
             )}
           </div>
 
           <div className={`flex items-center gap-1.5 flex-1 justify-start min-w-0 ${fixture.away.id === WYCOMBE_ESPN_ID ? 'font-bold text-[#009EE0]' : 'text-gray-200'}`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={fixture.away.logo} alt="" className="w-5 h-5 object-contain shrink-0" />
+            <img src={fixture.away.logo} alt="" aria-hidden="true" className="w-5 h-5 object-contain shrink-0" />
             <span className="truncate text-sm">{fixture.away.name}</span>
           </div>
         </div>
@@ -99,17 +104,22 @@ function FixtureRow({
         {/* Result badge */}
         <div className="w-8 shrink-0 flex items-center justify-end">
           {result && (
-            <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full border ${
-              result === 'W' ? 'bg-green-500/10 border-green-500/30 text-green-400' :
-              result === 'L' ? 'bg-red-500/10 border-red-500/30 text-red-400' :
-              'bg-amber-400/10 border-amber-400/30 text-amber-400'
-            }`}>{result}</span>
+            <span
+              aria-label={result === 'W' ? 'Win' : result === 'L' ? 'Loss' : 'Draw'}
+              className={`text-xs font-bold px-1.5 py-0.5 rounded-full border ${
+                result === 'W' ? 'bg-green-500/10 border-green-500/30 text-green-400' :
+                result === 'L' ? 'bg-red-500/10 border-red-500/30 text-red-400' :
+                'bg-amber-400/10 border-amber-400/30 text-amber-400'
+              }`}
+            >
+              {result}
+            </span>
           )}
         </div>
       </div>
 
       {fixture.round && (
-        <div className="text-xs text-gray-600 mt-0.5 pl-28">{fixture.round}</div>
+        <div className="text-xs text-gray-400 mt-0.5 pl-28">{fixture.round}</div>
       )}
     </div>
   )
@@ -131,20 +141,20 @@ export default function FixturesList({ fixtures }: { fixtures: Fixture[] }) {
   }, [])
 
   if (!sorted.length) {
-    return <p className="text-gray-500 text-sm">No fixture data available.</p>
+    return <p className="text-gray-400 text-sm">No fixture data available.</p>
   }
 
   return (
-    <div className="space-y-2">
+    <ol className="space-y-2 list-none" aria-label="Fixtures and results">
       {sorted.map((f, i) => (
-        <div key={f.id}>
+        <li key={f.id}>
           {i === duffIdx && (
-            <div className="flex items-center gap-3 py-2 mb-1">
-              <div className="flex-1 h-px bg-[#009EE0]/30" />
+            <div className="flex items-center gap-3 py-2 mb-1" role="separator" aria-label="Mike Duff appointed manager">
+              <div className="flex-1 h-px bg-[#009EE0]/30" aria-hidden="true" />
               <span className="text-xs font-semibold text-[#009EE0] whitespace-nowrap tracking-wide">
                 Mike Duff appointed — 18 Sep 2025
               </span>
-              <div className="flex-1 h-px bg-[#009EE0]/30" />
+              <div className="flex-1 h-px bg-[#009EE0]/30" aria-hidden="true" />
             </div>
           )}
           <FixtureRow
@@ -152,8 +162,8 @@ export default function FixturesList({ fixtures }: { fixtures: Fixture[] }) {
             isNext={i === nextIdx}
             anchorRef={i === nextIdx ? nextRef : undefined}
           />
-        </div>
+        </li>
       ))}
-    </div>
+    </ol>
   )
 }
