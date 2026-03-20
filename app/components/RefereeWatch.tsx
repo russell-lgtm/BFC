@@ -4,7 +4,7 @@ function RefereeAvatar() {
   return (
     <svg viewBox="0 0 80 80" width={72} height={72} aria-hidden="true">
       {/* Background circle */}
-      <circle cx="40" cy="40" r="40" fill="#142843" />
+      <circle cx="40" cy="40" r="40" fill="#030b14" />
       {/* Head */}
       <circle cx="40" cy="24" r="11" fill="#c9a87c" />
       {/* Neck */}
@@ -24,15 +24,16 @@ export default function RefereeWatch({ stats }: { stats: RefereeStats | null }) 
   if (!stats) {
     return (
       <section
-        className="bg-[#0e1f35]/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden"
+        className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#009EE0]/15 overflow-hidden"
+        style={{ boxShadow: '0 0 25px rgba(0,158,224,0.05)' }}
         aria-label="Referee Watch"
       >
-        <div className="h-1 w-full bg-[#f5c518]" aria-hidden="true" />
+        <div className="h-1 w-full bg-[#f5c518]" style={{ boxShadow: '0 0 8px rgba(245,197,24,0.3)' }} aria-hidden="true" />
         <div className="p-4">
-          <h2 className="font-bold text-lg text-white mb-2">Referee Watch</h2>
-          <p className="text-gray-400 text-sm">Referee not yet announced for next fixture.</p>
+          <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em] mb-2" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>Referee Watch</h2>
+          <p className="text-[#009EE0]/50 text-sm">Referee not yet announced for next fixture.</p>
         </div>
-        <div className="h-1 w-full bg-[#f5c518]" aria-hidden="true" />
+        <div className="h-1 w-full bg-[#f5c518]" style={{ boxShadow: '0 0 8px rgba(245,197,24,0.3)' }} aria-hidden="true" />
       </section>
     )
   }
@@ -42,20 +43,21 @@ export default function RefereeWatch({ stats }: { stats: RefereeStats | null }) 
 
   return (
     <section
-      className="bg-[#0e1f35]/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden"
+      className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#009EE0]/15 overflow-hidden"
+      style={{ boxShadow: '0 0 25px rgba(0,158,224,0.05)' }}
       aria-label={`Referee Watch: ${name}`}
     >
       {/* Yellow top stripe — classic referee yellow */}
-      <div className="h-1 w-full bg-[#f5c518]" aria-hidden="true" />
+      <div className="h-1 w-full bg-[#f5c518]" style={{ boxShadow: '0 0 8px rgba(245,197,24,0.3)' }} aria-hidden="true" />
 
       <div className="p-4">
-        <h2 className="font-bold text-lg text-white mb-4">Referee Watch</h2>
+        <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em] mb-4" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>Referee Watch</h2>
 
         <div className="flex items-start gap-5">
           {/* Avatar */}
           <div className="shrink-0">
             <RefereeAvatar />
-            <p className="text-center text-xs text-gray-400 mt-1.5 max-w-[72px] leading-tight">
+            <p className="text-center text-xs text-[#009EE0]/50 mt-1.5 max-w-[72px] leading-tight">
               {name}
             </p>
           </div>
@@ -64,10 +66,10 @@ export default function RefereeWatch({ stats }: { stats: RefereeStats | null }) 
           <div className="flex-1 min-w-0 space-y-4">
             {/* Wycombe record with this referee */}
             <div>
-              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
+              <h3 className="text-xs font-semibold text-[#009EE0]/55 uppercase tracking-[0.15em] mb-2">
                 Wycombe Record This Season
                 {gamesWithWycombe === 0 && (
-                  <span className="ml-2 text-gray-500 normal-case tracking-normal font-normal">
+                  <span className="ml-2 text-[#009EE0]/30 normal-case tracking-normal font-normal">
                     (first Wycombe game)
                   </span>
                 )}
@@ -81,44 +83,44 @@ export default function RefereeWatch({ stats }: { stats: RefereeStats | null }) 
                   ].map(({ label, value, color, full }) => (
                     <div
                       key={label}
-                      className="bg-[#142843] rounded-lg py-2 flex flex-col items-center"
+                      className="bg-[#030b14] border border-[#009EE0]/10 rounded-lg py-2 flex flex-col items-center"
                       aria-label={`${full}: ${value}`}
                     >
                       <span className={`text-lg font-bold ${color}`} aria-hidden="true">{value}</span>
-                      <span className="text-xs text-gray-400" aria-hidden="true">{label}</span>
+                      <span className="text-xs text-[#009EE0]/50" aria-hidden="true">{label}</span>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-gray-400">No previous Wycombe games with this referee this season.</p>
+                <p className="text-sm text-[#009EE0]/50">No previous Wycombe games with this referee this season.</p>
               )}
             </div>
 
             {/* Cards in Wycombe games */}
             {totalWycGames > 0 && (
               <div>
-                <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
+                <h3 className="text-xs font-semibold text-[#009EE0]/55 uppercase tracking-[0.15em] mb-2">
                   Cards in Wycombe Games
                 </h3>
                 <div className="grid grid-cols-2 gap-2">
                   <div
-                    className="bg-[#142843] rounded-lg py-2 flex items-center justify-center gap-2"
+                    className="bg-[#030b14] border border-[#009EE0]/10 rounded-lg py-2 flex items-center justify-center gap-2"
                     aria-label={`Yellow cards: ${yellowCards}`}
                   >
-                    <span className="w-3 h-4 rounded-sm bg-[#f5c518] shrink-0" aria-hidden="true" />
+                    <span className="w-3 h-4 rounded-sm bg-[#f5c518] shrink-0" style={{ boxShadow: '0 0 8px rgba(245,197,24,0.3)' }} aria-hidden="true" />
                     <span className="text-lg font-bold text-[#f5c518]" aria-hidden="true">{yellowCards}</span>
-                    <span className="text-xs text-gray-400">Yellow</span>
+                    <span className="text-xs text-[#009EE0]/50">Yellow</span>
                   </div>
                   <div
-                    className="bg-[#142843] rounded-lg py-2 flex items-center justify-center gap-2"
+                    className="bg-[#030b14] border border-[#009EE0]/10 rounded-lg py-2 flex items-center justify-center gap-2"
                     aria-label={`Red cards: ${redCards}`}
                   >
                     <span className="w-3 h-4 rounded-sm bg-red-500 shrink-0" aria-hidden="true" />
                     <span className="text-lg font-bold text-red-400" aria-hidden="true">{redCards}</span>
-                    <span className="text-xs text-gray-400">Red</span>
+                    <span className="text-xs text-[#009EE0]/50">Red</span>
                   </div>
                 </div>
-                <p className="text-xs text-gray-500 mt-1.5">
+                <p className="text-xs text-[#009EE0]/30 mt-1.5">
                   Across {gamesWithWycombe} Wycombe game{gamesWithWycombe !== 1 ? 's' : ''} this season
                 </p>
               </div>
@@ -127,7 +129,7 @@ export default function RefereeWatch({ stats }: { stats: RefereeStats | null }) 
         </div>
       </div>
 
-      <div className="h-1 w-full bg-[#f5c518]" aria-hidden="true" />
+      <div className="h-1 w-full bg-[#f5c518]" style={{ boxShadow: '0 0 8px rgba(245,197,24,0.3)' }} aria-hidden="true" />
     </section>
   )
 }

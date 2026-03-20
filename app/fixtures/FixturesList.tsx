@@ -52,10 +52,10 @@ function FixtureRow({
       aria-label={scoreLabel}
       className={`rounded-xl border px-4 py-3 ${
         isNext
-          ? 'border-[#009EE0]/50 bg-[#009EE0]/5 ring-1 ring-[#009EE0]/20'
+          ? 'border-[#009EE0]/50 bg-[#009EE0]/5 shadow-[0_0_15px_rgba(0,158,224,0.12)]'
           : isLive
             ? 'border-green-500/40 bg-green-500/5'
-            : 'border-white/10 bg-[#0e1f35]/60'
+            : 'border-[#009EE0]/8 bg-[#060f1a]/60'
       }`}
     >
       <div className="flex items-center gap-2">
@@ -64,24 +64,24 @@ function FixtureRow({
           {isLive ? (
             <span className="text-green-400 font-bold text-xs animate-pulse" role="status" aria-label="Match is live">LIVE</span>
           ) : isPostponed ? (
-            <span className="text-gray-400 text-xs">Postponed</span>
+            <span className="text-[#009EE0]/50 text-xs">Postponed</span>
           ) : isNext ? (
             <div>
               <div className="text-xs text-[#009EE0] font-medium">Next match</div>
-              <div className="text-xs text-gray-300">{formatDate(fixture.date)}</div>
-              <div className="text-xs text-gray-400">{formatTime(fixture.date)}</div>
+              <div className="text-xs text-[#cce4f5]/70">{formatDate(fixture.date)}</div>
+              <div className="text-xs text-[#009EE0]/50">{formatTime(fixture.date)}</div>
             </div>
           ) : (
             <div>
-              <div className="text-xs text-gray-300">{formatDate(fixture.date)}</div>
-              {!isFinished && <div className="text-xs text-gray-400">{formatTime(fixture.date)}</div>}
+              <div className="text-xs text-[#cce4f5]/70">{formatDate(fixture.date)}</div>
+              {!isFinished && <div className="text-xs text-[#009EE0]/50">{formatTime(fixture.date)}</div>}
             </div>
           )}
         </div>
 
         {/* Teams + score */}
         <div className="flex-1 flex items-center gap-2 min-w-0">
-          <div className={`flex items-center gap-1.5 flex-1 justify-end min-w-0 ${fixture.home.id === WYCOMBE_ESPN_ID ? 'font-bold text-[#009EE0]' : 'text-gray-200'}`}>
+          <div className={`flex items-center gap-1.5 flex-1 justify-end min-w-0 ${fixture.home.id === WYCOMBE_ESPN_ID ? 'font-bold text-[#009EE0]' : 'text-[#cce4f5]'}`}>
             <span className="truncate text-sm">{fixture.home.name}</span>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={fixture.home.logo} alt="" aria-hidden="true" className="w-5 h-5 object-contain shrink-0" />
@@ -89,15 +89,15 @@ function FixtureRow({
 
           <div className="shrink-0 w-16 text-center">
             {isFinished || isLive ? (
-              <span className={`font-bold text-base ${result ? resultColor : 'text-gray-200'}`} aria-hidden="true">
+              <span className={`font-bold text-base ${result ? resultColor : 'text-[#cce4f5]'}`} aria-hidden="true">
                 {fixture.home.score} – {fixture.away.score}
               </span>
             ) : (
-              <span className="text-gray-400 text-sm font-medium">vs</span>
+              <span className="text-[#009EE0]/50 text-sm font-medium">vs</span>
             )}
           </div>
 
-          <div className={`flex items-center gap-1.5 flex-1 justify-start min-w-0 ${fixture.away.id === WYCOMBE_ESPN_ID ? 'font-bold text-[#009EE0]' : 'text-gray-200'}`}>
+          <div className={`flex items-center gap-1.5 flex-1 justify-start min-w-0 ${fixture.away.id === WYCOMBE_ESPN_ID ? 'font-bold text-[#009EE0]' : 'text-[#cce4f5]'}`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={fixture.away.logo} alt="" aria-hidden="true" className="w-5 h-5 object-contain shrink-0" />
             <span className="truncate text-sm">{fixture.away.name}</span>
@@ -109,10 +109,10 @@ function FixtureRow({
           {result && (
             <span
               aria-label={result === 'W' ? 'Win' : result === 'L' ? 'Loss' : 'Draw'}
-              className={`text-xs font-bold px-1.5 py-0.5 rounded-full border ${
-                result === 'W' ? 'bg-green-500/10 border-green-500/30 text-green-400' :
-                result === 'L' ? 'bg-red-500/10 border-red-500/30 text-red-400' :
-                'bg-amber-400/10 border-amber-400/30 text-amber-400'
+              className={`w-5 h-5 rounded-full text-[9px] flex items-center justify-center font-bold border ${
+                result === 'W' ? 'border-green-400 text-green-300' :
+                result === 'L' ? 'border-red-500 text-red-400' :
+                'border-amber-400 text-amber-300'
               }`}
             >
               {result}
@@ -141,7 +141,7 @@ function FixtureRow({
       </div>
 
       {fixture.round && (
-        <div className="text-xs text-gray-400 mt-0.5 pl-28">{fixture.round}</div>
+        <div className="text-xs text-[#009EE0]/50 mt-0.5 pl-28">{fixture.round}</div>
       )}
     </div>
   )
@@ -169,7 +169,7 @@ export default function FixturesList({
   }, [])
 
   if (!sorted.length) {
-    return <p className="text-gray-400 text-sm">No fixture data available.</p>
+    return <p className="text-[#009EE0]/50 text-sm">No fixture data available.</p>
   }
 
   return (

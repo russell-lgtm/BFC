@@ -58,31 +58,42 @@ export default async function Home() {
       {/* Fixed stadium background — stays still as cards scroll over it */}
       <div
         className="fixed inset-0 -z-20 bg-cover bg-center bg-no-repeat"
-        style={bgImage ? { backgroundImage: `url(${bgImage})` } : { background: '#09111e' }}
+        style={bgImage ? { backgroundImage: `url(${bgImage})` } : { background: '#010810' }}
       />
-      {/* Dark overlay for readability */}
-      <div className="fixed inset-0 -z-10 bg-[#09111e]/78" />
+      {/* Dark overlay */}
+      <div className="fixed inset-0 -z-10 bg-[#010810]/90 tron-grid" />
 
       <main className="min-h-screen">
-        <header className="bg-[#002147]/95 backdrop-blur-sm text-white px-4 py-4 shadow-lg border-b border-white/5 sticky top-0 z-50">
+        <header
+          className="bg-[#020b16]/98 backdrop-blur-md text-white px-4 py-3 sticky top-0 z-50 border-b border-[#009EE0]/15"
+          style={{ boxShadow: '0 1px 0 rgba(0,158,224,0.08), 0 4px 24px rgba(0,0,0,0.8)' }}
+        >
           <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 min-w-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://a.espncdn.com/i/teamlogos/soccer/500/344.png"
                 alt="Wycombe Wanderers crest"
-                className="w-14 h-14 object-contain shrink-0 drop-shadow-lg"
+                className="w-12 h-12 object-contain shrink-0"
+                style={{ filter: 'drop-shadow(0 0 8px rgba(0,158,224,0.45))' }}
               />
               <div className="min-w-0 flex-1">
-                <h1 className="text-xl font-bold leading-tight">Wycombe Wanderers</h1>
+                <h1
+                  className="text-xl font-bold leading-tight tracking-wide text-white uppercase"
+                  style={{ textShadow: '0 0 14px rgba(0,158,224,0.35)' }}
+                >
+                  Wycombe Wanderers
+                </h1>
                 {wycPos && (
-                  <p className="text-sm font-medium mt-0.5 flex items-center gap-2 flex-wrap">
-                    <span className="text-gray-400 text-xs">League One</span>
-                    <span className="text-blue-300 mx-0.5">·</span>
-                    <span className="text-white font-bold">{wycPos.rank}{['th','st','nd','rd'][(wycPos.rank % 100 - 20) % 10] || ['th','st','nd','rd'][wycPos.rank % 100] || 'th'}</span>
-                    <span className="text-gray-400 text-xs">P</span><span className="text-gray-200 font-semibold">{wycPos.played}</span>
-                    <span className="text-gray-400 text-xs">Pts</span><span className="text-[#009EE0] font-bold">{wycPos.points}</span>
-                    <span className="text-gray-400 text-xs">GD</span><span className={`font-semibold ${wycPos.gd > 0 ? 'text-green-400' : wycPos.gd < 0 ? 'text-red-400' : 'text-gray-400'}`}>{wycPos.gd > 0 ? '+' : ''}{wycPos.gd}</span>
+                  <p className="text-xs font-medium mt-0.5 flex items-center gap-2 flex-wrap">
+                    <span className="text-[#009EE0]/50 uppercase tracking-wider">League One</span>
+                    <span className="text-[#009EE0]/30">·</span>
+                    <span className="text-[#cce4f5] font-bold">{wycPos.rank}{['th','st','nd','rd'][(wycPos.rank % 100 - 20) % 10] || ['th','st','nd','rd'][wycPos.rank % 100] || 'th'}</span>
+                    <span className="text-[#009EE0]/40">P</span><span className="text-[#cce4f5]/80">{wycPos.played}</span>
+                    <span className="text-[#009EE0]/40">Pts</span>
+                    <span className="text-[#009EE0] font-bold" style={{ textShadow: '0 0 8px rgba(0,158,224,0.6)' }}>{wycPos.points}</span>
+                    <span className="text-[#009EE0]/40">GD</span>
+                    <span className={`font-semibold ${wycPos.gd > 0 ? 'text-green-400' : wycPos.gd < 0 ? 'text-red-400' : 'text-[#009EE0]/50'}`}>{wycPos.gd > 0 ? '+' : ''}{wycPos.gd}</span>
                   </p>
                 )}
               </div>
@@ -107,7 +118,7 @@ export default async function Home() {
           <NewsSection news={newsData} />
         </div>
 
-        <footer className="max-w-5xl mx-auto px-4 py-6 text-center text-xs text-gray-600">
+        <footer className="max-w-5xl mx-auto px-4 py-6 text-center text-xs text-[#009EE0]/25">
           &copy; {new Date().getFullYear()} Russ Green. Unofficial fan site. Not affiliated with Wycombe Wanderers FC.
         </footer>
       </main>

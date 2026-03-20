@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #09111e;
-  --foreground: #e8edf2;
+  --background: #010810;
+  --foreground: #cce4f5;
   --wwfc-navy: #002147;
   --wwfc-blue: #009EE0;
-  --surface: #0e1f35;
-  --surface-elevated: #142843;
+  --surface: #060f1a;
+  --surface-elevated: #091627;
 }
 
 @theme inline {
@@ -31,8 +31,25 @@ html.large-text {
   font-size: 112.5%;
 }
 
-/* Ensure focus rings are always visible */
+/* Focus rings */
 :focus-visible {
   outline: 2px solid #009EE0;
   outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(0, 158, 224, 0.12);
+}
+
+/* Tron-style custom scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #010810; }
+::-webkit-scrollbar-thumb { background: rgba(0, 158, 224, 0.2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0, 158, 224, 0.4); }
+
+/* Subtle grid texture */
+@layer utilities {
+  .tron-grid {
+    background-image:
+      linear-gradient(rgba(0, 158, 224, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 158, 224, 0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
 }
