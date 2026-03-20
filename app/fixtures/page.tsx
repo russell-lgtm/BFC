@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { getFixtures, getStandings, getStadiumImage, WYCOMBE_ESPN_ID } from '../lib/football'
+import { getMatchHighlight, type HighlightVideo } from '../lib/youtube'
 import FixturesList from './FixturesList'
 import TextSizeToggle from '../components/TextSizeToggle'
 
@@ -17,6 +18,19 @@ export default async function FixturesPage() {
   const bgImage = stadiumResult.status === 'fulfilled' ? stadiumResult.value : null
 
   const wycPos = standings.find(s => s.team.id === WYCOMBE_ESPN_ID)
+
+  // Fetch highlights for all completed fixtures in parallel (each cached 24h)
+  const completed = fixtures.filter(f => f.status === 'finished')
+  const highlightResults = await Promise.allSettled(
+    completed.map(f => {
+      const opponent = f.home.id === WYCOMBE_ESPN_ID ? f.away.name : f.home.name
+      return getMatchHighlight(opponent, f.date)
+    }),
+  )
+  const highlights: Record<string, HighlightVideo | null> = {}
+  completed.forEach((f, i) => {
+    highlights[f.id] = highlightResults[i].status === 'fulfilled' ? highlightResults[i].value : null
+  })
 
   return (
     <>
@@ -68,7 +82,7 @@ export default async function FixturesPage() {
             <div className="mb-5">
               <h2 className="font-bold text-lg text-white">Fixtures &amp; Results</h2>
             </div>
-            <FixturesList fixtures={fixtures} />
+            <FixturesList fixtures={fixtures} highlights={highlights} />
           </div>
         </div>
       </main>
