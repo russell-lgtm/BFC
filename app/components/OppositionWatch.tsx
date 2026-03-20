@@ -2,6 +2,7 @@ import type { Fixture, OppositionData, StandingEntry } from '../lib/football'
 import { WYCOMBE_ESPN_ID } from '../lib/football'
 import { teamColor } from '../lib/teamColors'
 import type { NewsItem } from '../lib/rss'
+import KitIllustration from './KitIllustration'
 
 function isColorReadableOnDark(hex: string): boolean {
   if (!hex || hex.length < 7) return true
@@ -71,16 +72,34 @@ export default function OppositionWatch({
   // Reverse fixture: the already-played game between Wycombe and this opponent
   const reverseFixture = oppData?.reverseFixture ?? null
 
+  // Opposition wears away kit at Adams Park, home kit when Wycombe are away
+  const oppKitVariant = isHome ? 'away' : 'home'
+  const oppKitColors = oppKitVariant === 'home'
+    ? { primary: opp.primary, secondary: opp.secondary }
+    : { primary: opp.secondary, secondary: opp.primary }
+
   return (
-    <section className="bg-[#0e1f35]/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden" aria-label={`Opposition watch: ${opponent.name}`}>
+    <section className="bg-[#0e1f35]/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden" aria-label={`Opposition Report: ${opponent.name}`}>
       {/* Opposition colour top stripe */}
       <div className="h-1 w-full" style={{ backgroundColor: opp.primary }} aria-hidden="true" />
 
       <div className="p-4">
+        <h2 className="font-bold text-lg text-white mb-4">Opposition Report</h2>
+
         {/* Header */}
         <div className="flex items-center gap-4 mb-5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={opponent.logo} alt={`${opponent.name} crest`} className="w-16 h-16 object-contain drop-shadow-lg shrink-0" />
+
+          {/* Kit illustration */}
+          <KitIllustration
+            type="color"
+            primary={oppKitColors.primary}
+            secondary={oppKitColors.secondary}
+            label={oppKitVariant === 'home' ? 'Home' : 'Away'}
+            size={40}
+          />
+
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
               <h2 className="font-bold text-xl text-white leading-tight">{opponent.name}</h2>
