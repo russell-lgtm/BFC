@@ -7,7 +7,6 @@ import SquadSection from './components/SquadSection'
 import NewsSection from './components/NewsSection'
 import OppositionWatch from './components/OppositionWatch'
 import RefereeWatch from './components/RefereeWatch'
-import KitIllustration, { WWFC_KITS } from './components/KitIllustration'
 import TextSizeToggle from './components/TextSizeToggle'
 
 export const revalidate = 900
@@ -74,13 +73,7 @@ export default async function Home() {
                 alt="Wycombe Wanderers crest"
                 className="w-14 h-14 object-contain shrink-0 drop-shadow-lg"
               />
-              {/* Wycombe kit illustrations */}
-            <div className="hidden sm:flex items-center gap-1.5">
-              <KitIllustration {...WWFC_KITS.home} type="wikimedia" label="Home" size={36} />
-              <KitIllustration {...WWFC_KITS.away} type="wikimedia" label="Away" size={36} />
-            </div>
-
-            <div className="min-w-0 flex-1">
+              <div className="min-w-0 flex-1">
                 <h1 className="text-xl font-bold leading-tight">Wycombe Wanderers</h1>
                 {wycPos && (
                   <p className="text-sm font-medium mt-0.5 flex items-center gap-2 flex-wrap">
