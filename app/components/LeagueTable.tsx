@@ -118,17 +118,9 @@ export default function LeagueTable({
   const [period, setPeriod] = useState<Period>('season')
   const [view, setView] = useState<View>('all')
 
-  if (!standings?.length) {
-    return (
-      <section className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#009EE0]/15 p-4" style={{ boxShadow: '0 0 25px rgba(0,158,224,0.05)' }} aria-label="League table">
-        <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em] mb-2" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>League Table</h2>
-        <p className="text-[#009EE0]/50 text-sm">No standings data available</p>
-      </section>
-    )
-  }
-
   // Build the full ranked table for the selected period/view
   const tableData: RowData[] = useMemo(() => {
+    if (!standings?.length) return []
     if (period === 'season') {
       return standings.map(s => {
         const { form, ppg } = seasonFormAndPPG(s.team.id, recentResults, view)
@@ -150,6 +142,15 @@ export default function LeagueTable({
       )
       .map((s, i) => ({ ...s, rank: i + 1 }))
   }, [period, view, standings, recentResults])
+
+  if (!standings?.length) {
+    return (
+      <section className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#009EE0]/15 p-4" style={{ boxShadow: '0 0 25px rgba(0,158,224,0.05)' }} aria-label="League table">
+        <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em] mb-2" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>League Table</h2>
+        <p className="text-[#009EE0]/50 text-sm">No standings data available</p>
+      </section>
+    )
+  }
 
   const wycIdx = tableData.findIndex(s => s.team.id === WYCOMBE_ESPN_ID)
   const rows = expanded

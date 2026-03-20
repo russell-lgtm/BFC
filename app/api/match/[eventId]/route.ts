@@ -127,6 +127,7 @@ export async function GET(
 
   const events: MatchEvent[] = []
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const plays: any[] = data.plays ?? []
   for (const play of plays) {
     const type = play.type?.text?.toLowerCase() ?? ''
@@ -147,6 +148,7 @@ export async function GET(
   }
 
   if (events.filter(e => ['goal', 'ownGoal', 'penalty'].includes(e.type)).length === 0) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     for (const entry of (data.scoringSummary ?? []) as any[]) {
       const clock = entry.clock?.displayValue ?? ''
       const type = entry.type?.text?.toLowerCase() ?? ''
@@ -161,7 +163,9 @@ export async function GET(
   }
 
   const comp = data.header?.competitions?.[0]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const homeTeam = home || comp?.competitors?.find((c: any) => c.homeAway === 'home')?.team?.displayName || ''
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const awayTeam = away || comp?.competitors?.find((c: any) => c.homeAway === 'away')?.team?.displayName || ''
   const matchDate = new Date(dateParam || comp?.date || '')
   const opponent = homeTeam.toLowerCase().includes('wycombe') ? awayTeam : homeTeam

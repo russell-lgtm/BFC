@@ -54,11 +54,14 @@ export interface Player {
 
 // ── Parsers ────────────────────────────────────────────────────────────────
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function parseEvent(event: any): Fixture | null {
   const comp = event.competitions?.[0]
   if (!comp) return null
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const home = comp.competitors?.find((c: any) => c.homeAway === 'home')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const away = comp.competitors?.find((c: any) => c.homeAway === 'away')
   if (!home || !away) return null
 
@@ -69,9 +72,11 @@ function parseEvent(event: any): Fixture | null {
   else if (st?.state === 'in') status = 'live'
   else if (st?.name?.includes('POSTPONED') || st?.name?.includes('CANCELED')) status = 'postponed'
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const logo = (c: any) =>
     c.team?.logos?.[0]?.href ?? `https://a.espncdn.com/i/teamlogos/soccer/500/${c.id}.png`
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const score = (c: any) => {
     const v = c.score
     if (v == null) return null
@@ -99,6 +104,7 @@ export async function getFixtures(): Promise<Fixture[]> {
   // Past results: schedule endpoint (all events have no status field, so force 'finished')
   const pastData = await espnFetch(`${SITE_API}/teams/${WYCOMBE_ESPN_ID}/schedule`, 900)
   const pastFixtures: Fixture[] = (pastData?.events ?? [])
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .map((e: any) => parseEvent(e))
     .filter(Boolean)
     .map((f: Fixture) => ({ ...f, status: 'finished' as const }))
@@ -110,9 +116,12 @@ export async function getFixtures(): Promise<Fixture[]> {
   const url = `${SITE_API}/scoreboard?dates=${fmt(now)}-${fmt(seasonEnd)}&limit=200`
   const upcomingData = await espnFetch(url, 900)
   const upcomingFixtures: Fixture[] = (upcomingData?.events ?? [])
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .filter((e: any) =>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       e.competitions?.[0]?.competitors?.some((c: any) => c.id === WYCOMBE_ESPN_ID)
     )
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .map((e: any) => parseEvent(e))
     .filter(Boolean)
     .map((f: Fixture) => {
@@ -138,9 +147,11 @@ export async function getStandings(): Promise<StandingEntry[]> {
   const data = await espnFetch(`${WEB_API}/standings`, 3600)
   if (!data) return []
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const entries: any[] = data.children?.[0]?.standings?.entries ?? []
   return entries.map(e => {
     const stat = (name: string) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const s = e.stats?.find((s: any) => s.name === name)
       return Number(s?.value ?? 0)
     }
@@ -167,10 +178,12 @@ export async function getSquad(): Promise<Player[]> {
   const data = await espnFetch(`${SITE_API}/teams/${WYCOMBE_ESPN_ID}/roster`, 21600)
   if (!data) return []
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (data.athletes ?? []).map((a: any) => {
     const stat = (name: string) => {
       const cats = a.statistics?.splits?.categories ?? []
       for (const cat of cats) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const s = cat.stats?.find((s: any) => s.name === name)
         if (s) return Number(s.value ?? 0)
       }
@@ -195,8 +208,10 @@ export async function getSquad(): Promise<Player[]> {
 export async function getLastMatchImage(eventId: string): Promise<{ url: string; caption: string } | null> {
   const data = await espnFetch(`${SITE_API}/summary?event=${eventId}`, 3600)
   if (!data) return null
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const articles: any[] = data.news?.articles ?? []
   for (const a of articles) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const img = a.images?.find((i: any) => i.url?.includes('espncdn.com/photo'))
     if (img?.url) return { url: img.url, caption: a.headline ?? '' }
   }
@@ -259,6 +274,7 @@ export async function getOppositionData(teamId: string): Promise<OppositionData 
   ])
 
   const allFinished: Fixture[] = (scheduleData?.events ?? [])
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .map((e: any) => parseEvent(e))
     .filter(Boolean)
     .map((f: Fixture) => ({ ...f, status: 'finished' as const }))
@@ -271,10 +287,12 @@ export async function getOppositionData(teamId: string): Promise<OppositionData 
   const recentResults: Fixture[] = allFinished.slice(0, 10)
 
   const allPlayers: Player[] = (rosterData?.athletes ?? [])
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .map((a: any) => {
       const stat = (name: string) => {
         const cats = a.statistics?.splits?.categories ?? []
         for (const cat of cats) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const s = cat.stats?.find((s: any) => s.name === name)
           if (s) return Number(s.value ?? 0)
         }

@@ -7,8 +7,9 @@ export default function TextSizeToggle() {
 
   useEffect(() => {
     const stored = localStorage.getItem('large-text') === 'true'
-    setIsLarge(stored)
     document.documentElement.classList.toggle('large-text', stored)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsLarge(stored)
   }, [])
 
   function toggle() {
