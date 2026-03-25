@@ -3,6 +3,7 @@ import { getFixtures, getStandings, getStadiumImage, WYCOMBE_ESPN_ID } from '../
 import { getMatchHighlight, type HighlightVideo } from '../lib/youtube'
 import FixturesList from './FixturesList'
 import TextSizeToggle from '../components/TextSizeToggle'
+import ScoreboardTitle from '../components/ScoreboardTitle'
 
 export const revalidate = 900
 
@@ -63,14 +64,14 @@ export default async function FixturesPage() {
                 </h1>
                 {wycPos && (
                   <p className="text-xs font-medium mt-0.5 flex items-center gap-2 flex-wrap">
-                    <span className="text-[#009EE0]/50 uppercase tracking-wider">League One</span>
-                    <span className="text-[#009EE0]/30">·</span>
+                    <span className="text-[#009EE0] uppercase tracking-wider">League One</span>
+                    <span className="text-[#009EE0]">·</span>
                     <span className="text-[#cce4f5] font-bold">{wycPos.rank}{['th','st','nd','rd'][(wycPos.rank % 100 - 20) % 10] || ['th','st','nd','rd'][wycPos.rank % 100] || 'th'}</span>
-                    <span className="text-[#009EE0]/40">P</span><span className="text-[#cce4f5]/80">{wycPos.played}</span>
-                    <span className="text-[#009EE0]/40">Pts</span>
+                    <span className="text-[#009EE0]">P</span><span className="text-[#cce4f5]">{wycPos.played}</span>
+                    <span className="text-[#009EE0]">Pts</span>
                     <span className="text-[#009EE0] font-bold" style={{ textShadow: '0 0 8px rgba(0,158,224,0.6)' }}>{wycPos.points}</span>
-                    <span className="text-[#009EE0]/40">GD</span>
-                    <span className={`font-semibold ${wycPos.gd > 0 ? 'text-green-400' : wycPos.gd < 0 ? 'text-red-400' : 'text-[#009EE0]/50'}`}>{wycPos.gd > 0 ? '+' : ''}{wycPos.gd}</span>
+                    <span className="text-[#009EE0]">GD</span>
+                    <span className={`font-semibold ${wycPos.gd > 0 ? 'text-green-400' : wycPos.gd < 0 ? 'text-red-400' : 'text-[#009EE0]'}`}>{wycPos.gd > 0 ? '+' : ''}{wycPos.gd}</span>
                   </p>
                 )}
               </div>
@@ -92,12 +93,8 @@ export default async function FixturesPage() {
         <div className="max-w-5xl mx-auto px-4 py-6">
           <div className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#009EE0]/15 p-4" style={{ boxShadow: '0 0 25px rgba(0,158,224,0.05)' }}>
             <div className="mb-5">
-              <h2
-                className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em]"
-                style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}
-              >
-                Fixtures &amp; Results
-              </h2>
+              <h2 className="sr-only">Fixtures &amp; Results</h2>
+              <ScoreboardTitle text="Fixtures & Results" />
             </div>
             <FixturesList fixtures={fixtures} highlights={highlights} />
           </div>

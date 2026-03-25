@@ -64,16 +64,16 @@ function FixtureRow({
           {isLive ? (
             <span className="text-green-400 font-bold text-xs animate-pulse" role="status" aria-label="Match is live">LIVE</span>
           ) : isPostponed ? (
-            <span className="text-[#009EE0]/50 text-xs">Postponed</span>
+            <span className="text-[#009EE0] text-xs">Postponed</span>
           ) : isNext ? (
             <div>
               <div className="text-xs text-[#009EE0] font-medium">Next match</div>
-              <div className="text-xs text-[#cce4f5]/70">{formatDate(fixture.date)}</div>
+              <div className="text-xs text-[#cce4f5]">{formatDate(fixture.date)}</div>
               <div className="text-xs text-[#009EE0]/50">{formatTime(fixture.date)}</div>
             </div>
           ) : (
             <div>
-              <div className="text-xs text-[#cce4f5]/70">{formatDate(fixture.date)}</div>
+              <div className="text-xs text-[#cce4f5]">{formatDate(fixture.date)}</div>
               {!isFinished && <div className="text-xs text-[#009EE0]/50">{formatTime(fixture.date)}</div>}
             </div>
           )}

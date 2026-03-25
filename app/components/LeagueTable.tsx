@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react'
 import type { StandingEntry, Fixture } from '../lib/football'
 import { WYCOMBE_ESPN_ID } from '../lib/football'
+import ScoreboardTitle from './ScoreboardTitle'
 
 type Period = 'season' | 'last10' | 'last5'
 type View = 'all' | 'home' | 'away'
@@ -146,8 +147,9 @@ export default function LeagueTable({
   if (!standings?.length) {
     return (
       <section className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#009EE0]/15 p-4" style={{ boxShadow: '0 0 25px rgba(0,158,224,0.05)' }} aria-label="League table">
-        <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em] mb-2" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>League Table</h2>
-        <p className="text-[#009EE0]/50 text-sm">No standings data available</p>
+        <h2 className="sr-only">League Table</h2>
+        <ScoreboardTitle text="League Table" />
+        <p className="text-[#cce4f5] text-sm mt-2">No standings data available</p>
       </section>
     )
   }
@@ -162,9 +164,10 @@ export default function LeagueTable({
   return (
     <section className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#009EE0]/15 p-4" style={{ boxShadow: '0 0 25px rgba(0,158,224,0.05)' }} aria-label="League table">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em]" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>League Table</h2>
+        <h2 className="sr-only">League Table</h2>
+        <ScoreboardTitle text="League Table" />
         {period !== 'season' && (
-          <span className="text-xs text-[#009EE0]/50 italic">{periodLabel} · all metrics recomputed</span>
+          <span className="text-xs text-[#009EE0] italic">{periodLabel} · all metrics recomputed</span>
         )}
       </div>
 
@@ -227,7 +230,7 @@ export default function LeagueTable({
               const gdColor = s.gd > 0 ? 'text-green-400' : s.gd < 0 ? 'text-red-400' : 'text-[#009EE0]/50'
               return (
                 <tr key={s.team.id} className={`border-t border-[#009EE0]/8 ${isWyc ? 'bg-[#009EE0]/8 border-t border-[#009EE0]/15' : ''}`}>
-                  <td className={`py-2.5 pr-3 text-xs ${isWyc ? 'font-bold text-[#009EE0]' : 'text-[#009EE0]/50'}`}>
+                  <td className={`py-2.5 pr-3 text-xs ${isWyc ? 'font-bold text-[#009EE0]' : 'text-[#009EE0]'}`}>
                     {s.rank}
                   </td>
                   <td className="py-2.5 pr-6">
@@ -239,10 +242,10 @@ export default function LeagueTable({
                       </span>
                     </div>
                   </td>
-                  <td className="text-center py-2.5 px-3 text-[#cce4f5]/70 text-xs">{s.played}</td>
-                  <td className="text-center py-2.5 px-3 text-[#cce4f5]/70 text-xs">{s.won}</td>
-                  <td className="text-center py-2.5 px-3 text-[#cce4f5]/70 text-xs">{s.drawn}</td>
-                  <td className="text-center py-2.5 px-3 text-[#cce4f5]/70 text-xs">{s.lost}</td>
+                  <td className="text-center py-2.5 px-3 text-[#cce4f5] text-xs">{s.played}</td>
+                  <td className="text-center py-2.5 px-3 text-[#cce4f5] text-xs">{s.won}</td>
+                  <td className="text-center py-2.5 px-3 text-[#cce4f5] text-xs">{s.drawn}</td>
+                  <td className="text-center py-2.5 px-3 text-[#cce4f5] text-xs">{s.lost}</td>
                   <td className={`text-center py-2.5 px-3 text-xs ${gdColor}`}>
                     {s.gd > 0 ? '+' : ''}{s.gd}
                   </td>
@@ -253,7 +256,7 @@ export default function LeagueTable({
                   <td className="text-center py-2.5 px-3 hidden sm:table-cell">
                     <FormDots form={s.form} />
                   </td>
-                  <td className="text-center py-2.5 pl-3 text-xs text-[#cce4f5]/70 hidden sm:table-cell">
+                  <td className="text-center py-2.5 pl-3 text-xs text-[#cce4f5] hidden sm:table-cell">
                     {period === 'season'
                       ? (s.seasonPPG ?? (s.played > 0 ? (s.points / s.played).toFixed(1) : '–'))
                       : formPPG(s.form)}

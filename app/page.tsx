@@ -86,14 +86,14 @@ export default async function Home() {
                 </h1>
                 {wycPos && (
                   <p className="text-xs font-medium mt-0.5 flex items-center gap-2 flex-wrap">
-                    <span className="text-[#009EE0]/50 uppercase tracking-wider">League One</span>
-                    <span className="text-[#009EE0]/30">·</span>
+                    <span className="text-[#009EE0] uppercase tracking-wider">League One</span>
+                    <span className="text-[#009EE0]">·</span>
                     <span className="text-[#cce4f5] font-bold">{wycPos.rank}{['th','st','nd','rd'][(wycPos.rank % 100 - 20) % 10] || ['th','st','nd','rd'][wycPos.rank % 100] || 'th'}</span>
-                    <span className="text-[#009EE0]/40">P</span><span className="text-[#cce4f5]/80">{wycPos.played}</span>
-                    <span className="text-[#009EE0]/40">Pts</span>
+                    <span className="text-[#009EE0]">P</span><span className="text-[#cce4f5]">{wycPos.played}</span>
+                    <span className="text-[#009EE0]">Pts</span>
                     <span className="text-[#009EE0] font-bold" style={{ textShadow: '0 0 8px rgba(0,158,224,0.6)' }}>{wycPos.points}</span>
-                    <span className="text-[#009EE0]/40">GD</span>
-                    <span className={`font-semibold ${wycPos.gd > 0 ? 'text-green-400' : wycPos.gd < 0 ? 'text-red-400' : 'text-[#009EE0]/50'}`}>{wycPos.gd > 0 ? '+' : ''}{wycPos.gd}</span>
+                    <span className="text-[#009EE0]">GD</span>
+                    <span className={`font-semibold ${wycPos.gd > 0 ? 'text-green-400' : wycPos.gd < 0 ? 'text-red-400' : 'text-[#009EE0]'}`}>{wycPos.gd > 0 ? '+' : ''}{wycPos.gd}</span>
                   </p>
                 )}
               </div>
@@ -118,7 +118,7 @@ export default async function Home() {
           <NewsSection news={newsData} />
         </div>
 
-        <footer className="max-w-5xl mx-auto px-4 py-6 text-center text-xs text-[#009EE0]/25">
+        <footer className="max-w-5xl mx-auto px-4 py-6 text-center text-xs text-[#009EE0]">
           &copy; {new Date().getFullYear()} Russ Green. Unofficial fan site. Not affiliated with Wycombe Wanderers FC.
         </footer>
       </main>
