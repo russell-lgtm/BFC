@@ -5,48 +5,54 @@ export interface HighlightVideo {
 
 const CHANNEL_ID = 'UCAalMUm3LIf504ItA3rqfug'
 
+// YouTube provides a free Atom RSS feed of the latest ~15 uploads per channel.
+// No API key, no quota. We fetch once and cache for 1h, then match entries to fixtures.
+async function getChannelVideos(): Promise<{ videoId: string; title: string; published: Date }[]> {
+  try {
+    const res = await fetch(
+      `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`,
+      { next: { revalidate: 3600 } },
+    )
+    if (!res.ok) return []
+    const xml = await res.text()
+
+    return [...xml.matchAll(/<entry>([\s\S]*?)<\/entry>/g)].flatMap(m => {
+      const entry = m[1]
+      const videoId = entry.match(/<yt:videoId>([^<]+)<\/yt:videoId>/)?.[1]
+      const title = entry.match(/<title>([^<]+)<\/title>/)?.[1]
+      const published = entry.match(/<published>([^<]+)<\/published>/)?.[1]
+      if (!videoId || !title || !published) return []
+      return [{ videoId, title, published: new Date(published) }]
+    })
+  } catch {
+    return []
+  }
+}
+
 export async function getMatchHighlight(
   opponent: string,
   matchDate: string,
 ): Promise<HighlightVideo | null> {
-  const apiKey = process.env.YOUTUBE_API_KEY
-  if (!apiKey) return null
+  const videos = await getChannelVideos()
+  if (!videos.length) return null
 
-  const date = new Date(matchDate)
+  const matchDay = new Date(matchDate)
+  const windowStart = new Date(matchDay)
+  windowStart.setUTCHours(0, 0, 0, 0)
+  const windowEnd = new Date(matchDay)
+  windowEnd.setUTCDate(windowEnd.getUTCDate() + 4)
+  windowEnd.setUTCHours(0, 0, 0, 0)
 
-  // Search from midnight on match day to end of day after (highlights often posted next morning)
-  const after = new Date(date)
-  after.setUTCHours(0, 0, 0, 0)
-  const before = new Date(date)
-  before.setUTCDate(before.getUTCDate() + 2)
-  before.setUTCHours(0, 0, 0, 0)
+  // Match on opponent's first word (handles "Manchester City" → "manchester")
+  const oppFirst = opponent.split(' ')[0].toLowerCase()
 
-  const params = new URLSearchParams({
-    part: 'snippet',
-    channelId: CHANNEL_ID,
-    q: `${opponent} highlights`,
-    type: 'video',
-    publishedAfter: after.toISOString(),
-    publishedBefore: before.toISOString(),
-    maxResults: '3',
-    order: 'relevance',
-    key: apiKey,
-  })
-
-  try {
-    const res = await fetch(
-      `https://www.googleapis.com/youtube/v3/search?${params}`,
-      { next: { revalidate: 86400 } },
-    )
-    if (!res.ok) return null
-    const data = await res.json()
-    const item = data.items?.[0]
-    if (!item?.id?.videoId) return null
-    return {
-      videoId: item.id.videoId,
-      title: item.snippet.title,
-    }
-  } catch {
-    return null
+  for (const v of videos) {
+    if (v.published < windowStart || v.published >= windowEnd) continue
+    const t = v.title.toLowerCase()
+    if (!t.includes('highlight')) continue
+    if (!t.includes(oppFirst)) continue
+    return { videoId: v.videoId, title: v.title }
   }
+
+  return null
 }
