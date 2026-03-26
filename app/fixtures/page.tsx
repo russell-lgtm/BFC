@@ -3,7 +3,6 @@ import { getFixtures, getStandings, getStadiumImage, WYCOMBE_ESPN_ID } from '../
 import { getMatchHighlight, type HighlightVideo } from '../lib/youtube'
 import FixturesList from './FixturesList'
 import TextSizeToggle from '../components/TextSizeToggle'
-import ScoreboardTitle from '../components/ScoreboardTitle'
 
 export const revalidate = 900
 
@@ -93,8 +92,7 @@ export default async function FixturesPage() {
         <div className="max-w-5xl mx-auto px-4 py-6">
           <div className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#009EE0]/15 p-4" style={{ boxShadow: '0 0 25px rgba(0,158,224,0.05)' }}>
             <div className="mb-5">
-              <h2 className="sr-only">Fixtures &amp; Results</h2>
-              <ScoreboardTitle text="Fixtures & Results" />
+              <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em]" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>Fixtures &amp; Results</h2>
             </div>
             <FixturesList fixtures={fixtures} highlights={highlights} />
           </div>

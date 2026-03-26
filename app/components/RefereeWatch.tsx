@@ -1,5 +1,4 @@
 import type { RefereeStats } from '../lib/referee'
-import ScoreboardTitle from './ScoreboardTitle'
 
 function RefereeAvatar() {
   return (
@@ -31,9 +30,8 @@ export default function RefereeWatch({ stats }: { stats: RefereeStats | null }) 
       >
         <div className="h-1 w-full bg-[#f5c518]" style={{ boxShadow: '0 0 8px rgba(245,197,24,0.3)' }} aria-hidden="true" />
         <div className="p-4">
-          <h2 className="sr-only">Referee Watch</h2>
-          <ScoreboardTitle text="Referee Watch" />
-          <p className="text-[#cce4f5] text-sm mt-3">Referee not yet announced for next fixture.</p>
+          <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em] mb-2" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>Referee Watch</h2>
+          <p className="text-[#cce4f5] text-sm">Referee not yet announced for next fixture.</p>
         </div>
         <div className="h-1 w-full bg-[#f5c518]" style={{ boxShadow: '0 0 8px rgba(245,197,24,0.3)' }} aria-hidden="true" />
       </section>
@@ -53,8 +51,7 @@ export default function RefereeWatch({ stats }: { stats: RefereeStats | null }) 
       <div className="h-1 w-full bg-[#f5c518]" style={{ boxShadow: '0 0 8px rgba(245,197,24,0.3)' }} aria-hidden="true" />
 
       <div className="p-4">
-        <h2 className="sr-only">Referee Watch</h2>
-        <ScoreboardTitle text="Referee Watch" />
+        <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em] mb-4" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>Referee Watch</h2>
 
         <div className="flex items-start gap-5">
           {/* Avatar */}

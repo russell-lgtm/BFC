@@ -4,7 +4,6 @@ import Link from 'next/link'
 import type { Fixture, StandingEntry } from '../lib/football'
 import { WYCOMBE_ESPN_ID } from '../lib/football'
 import { teamColor, isReadableOnDark } from '../lib/teamColors'
-import ScoreboardTitle from './ScoreboardTitle'
 
 function isHome(f: Fixture) { return f.home.id === WYCOMBE_ESPN_ID }
 
@@ -151,8 +150,7 @@ export default function FixturesSection({ fixtures, standings }: { fixtures: Fix
   if (!fixtures?.length) {
     return (
       <section className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#009EE0]/15 p-4" aria-label="Fixtures and results">
-        <h2 className="sr-only">Fixtures &amp; Results</h2>
-        <ScoreboardTitle text="Fixtures & Results" />
+        <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em] mb-2" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>Fixtures &amp; Results</h2>
         <p className="text-[#cce4f5] text-sm">No fixture data available</p>
       </section>
     )
@@ -175,8 +173,7 @@ export default function FixturesSection({ fixtures, standings }: { fixtures: Fix
       aria-label="Fixtures and results"
     >
       <div className="flex items-center justify-between mb-4">
-        <h2 className="sr-only">Fixtures &amp; Results</h2>
-        <ScoreboardTitle text="Fixtures & Results" />
+        <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em]" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>Fixtures &amp; Results</h2>
         <Link
           href="/fixtures"
           className="text-xs border border-[#009EE0]/40 text-[#009EE0] px-3 py-1.5 rounded font-semibold uppercase tracking-wider hover:bg-[#009EE0]/8 hover:border-[#009EE0]/80 transition-all focus:outline-none focus:ring-2 focus:ring-[#009EE0]/50"

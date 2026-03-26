@@ -2,7 +2,6 @@ import type { Fixture, OppositionData, StandingEntry } from '../lib/football'
 import { WYCOMBE_ESPN_ID } from '../lib/football'
 import { teamColor } from '../lib/teamColors'
 import type { NewsItem } from '../lib/rss'
-import ScoreboardTitle from './ScoreboardTitle'
 
 function isColorReadableOnDark(hex: string): boolean {
   if (!hex || hex.length < 7) return true
@@ -78,8 +77,7 @@ export default function OppositionWatch({
       <div className="h-1 w-full" style={{ backgroundColor: opp.primary }} aria-hidden="true" />
 
       <div className="p-4">
-        <h2 className="sr-only">Opposition Report</h2>
-        <ScoreboardTitle text="Opposition Report" />
+        <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em] mb-4" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>Opposition Report</h2>
 
         {/* Header */}
         <div className="flex items-center gap-4 mb-5">

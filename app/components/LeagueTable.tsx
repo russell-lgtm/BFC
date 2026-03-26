@@ -3,7 +3,6 @@
 import { useState, useMemo } from 'react'
 import type { StandingEntry, Fixture } from '../lib/football'
 import { WYCOMBE_ESPN_ID } from '../lib/football'
-import ScoreboardTitle from './ScoreboardTitle'
 
 type Period = 'season' | 'last10' | 'last5'
 type View = 'all' | 'home' | 'away'
@@ -147,9 +146,8 @@ export default function LeagueTable({
   if (!standings?.length) {
     return (
       <section className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#009EE0]/15 p-4" style={{ boxShadow: '0 0 25px rgba(0,158,224,0.05)' }} aria-label="League table">
-        <h2 className="sr-only">League Table</h2>
-        <ScoreboardTitle text="League Table" />
-        <p className="text-[#cce4f5] text-sm mt-2">No standings data available</p>
+        <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em] mb-2" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>League Table</h2>
+        <p className="text-[#cce4f5] text-sm">No standings data available</p>
       </section>
     )
   }
@@ -164,8 +162,7 @@ export default function LeagueTable({
   return (
     <section className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#009EE0]/15 p-4" style={{ boxShadow: '0 0 25px rgba(0,158,224,0.05)' }} aria-label="League table">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="sr-only">League Table</h2>
-        <ScoreboardTitle text="League Table" />
+        <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em]" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>League Table</h2>
         {period !== 'season' && (
           <span className="text-xs text-[#009EE0] italic">{periodLabel} · all metrics recomputed</span>
         )}
