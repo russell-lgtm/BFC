@@ -1,16 +1,16 @@
 export interface RefereeStats {
   name: string
-  /** Number of Wycombe League One games this referee has taken this season */
-  gamesWithWycombe: number
-  wycombeRecord: { w: number; d: number; l: number }
-  /** Yellow cards issued across Wycombe games this season */
+  /** Number of Brentford Premier League games this referee has taken this season */
+  gamesWithTeam: number
+  teamRecord: { w: number; d: number; l: number }
+  /** Yellow cards issued across Brentford games this season */
   yellowCards: number
-  /** Red cards (inc. second yellows) issued across Wycombe games this season */
+  /** Red cards (inc. second yellows) issued across Brentford games this season */
   redCards: number
 }
 
-const WYCOMBE_ID = 1358
-const LEAGUE_ID = 41
+const TEAM_ID = 55
+const LEAGUE_ID = 39
 const SEASON = 2024
 
 interface ApiFixture {
@@ -27,12 +27,12 @@ interface ApiFixture {
   goals: { home: number | null; away: number | null }
 }
 
-async function fetchWycombeFixtures(): Promise<ApiFixture[]> {
+async function fetchTeamFixtures(): Promise<ApiFixture[]> {
   const key = process.env.API_FOOTBALL_KEY
   if (!key) return []
   try {
     const res = await fetch(
-      `https://v3.football.api-sports.io/fixtures?team=${WYCOMBE_ID}&league=${LEAGUE_ID}&season=${SEASON}`,
+      `https://v3.football.api-sports.io/fixtures?team=${TEAM_ID}&league=${LEAGUE_ID}&season=${SEASON}`,
       { headers: { 'x-apisports-key': key }, next: { revalidate: 3600 } },
     )
     if (!res.ok) return []
@@ -66,7 +66,7 @@ async function fetchCardCounts(fixtureId: number): Promise<{ yellow: number; red
 }
 
 export async function getRefereeStats(): Promise<RefereeStats | null> {
-  const fixtures = await fetchWycombeFixtures()
+  const fixtures = await fetchTeamFixtures()
   if (!fixtures.length) return null
 
   const now = new Date()
@@ -88,7 +88,7 @@ export async function getRefereeStats(): Promise<RefereeStats | null> {
   // Calculate W/D/L
   let w = 0, d = 0, l = 0
   for (const f of pastWithRef) {
-    const wycHome = f.teams.home.id === WYCOMBE_ID
+    const wycHome = f.teams.home.id === TEAM_ID
     const wycGoals = wycHome ? f.goals.home : f.goals.away
     const oppGoals = wycHome ? f.goals.away : f.goals.home
     if (wycGoals == null || oppGoals == null) continue
@@ -106,8 +106,8 @@ export async function getRefereeStats(): Promise<RefereeStats | null> {
 
   return {
     name: refName,
-    gamesWithWycombe: pastWithRef.length,
-    wycombeRecord: { w, d, l },
+    gamesWithTeam: pastWithRef.length,
+    teamRecord: { w, d, l },
     yellowCards,
     redCards,
   }

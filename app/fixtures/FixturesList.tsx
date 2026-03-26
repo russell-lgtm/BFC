@@ -2,7 +2,7 @@
 
 import { useRef, useLayoutEffect } from 'react'
 import type { Fixture } from '../lib/football'
-import { WYCOMBE_ESPN_ID } from '../lib/football'
+import { TEAM_ESPN_ID } from '../lib/football'
 import type { HighlightVideo } from '../lib/youtube'
 
 function formatDate(dateStr: string) {
@@ -29,7 +29,7 @@ function FixtureRow({
   anchorRef?: React.RefObject<HTMLDivElement | null>
   highlight?: HighlightVideo | null
 }) {
-  const isWycHome = fixture.home.id === WYCOMBE_ESPN_ID
+  const isWycHome = fixture.home.id === TEAM_ESPN_ID
   const isFinished = fixture.status === 'finished'
   const isLive = fixture.status === 'live'
   const isPostponed = fixture.status === 'postponed'
@@ -52,10 +52,10 @@ function FixtureRow({
       aria-label={scoreLabel}
       className={`rounded-xl border px-4 py-3 ${
         isNext
-          ? 'border-[#009EE0]/50 bg-[#009EE0]/5 shadow-[0_0_15px_rgba(0,158,224,0.12)]'
+          ? 'border-[#e30613]/50 bg-[#e30613]/5 shadow-[0_0_15px_rgba(227,6,19,0.12)]'
           : isLive
             ? 'border-green-500/40 bg-green-500/5'
-            : 'border-[#009EE0]/8 bg-[#060f1a]/60'
+            : 'border-[#e30613]/8 bg-[#060f1a]/60'
       }`}
     >
       <div className="flex items-center gap-2">
@@ -64,24 +64,24 @@ function FixtureRow({
           {isLive ? (
             <span className="text-green-400 font-bold text-xs animate-pulse" role="status" aria-label="Match is live">LIVE</span>
           ) : isPostponed ? (
-            <span className="text-[#009EE0] text-xs">Postponed</span>
+            <span className="text-[#e30613] text-xs">Postponed</span>
           ) : isNext ? (
             <div>
-              <div className="text-xs text-[#009EE0] font-medium">Next match</div>
+              <div className="text-xs text-[#e30613] font-medium">Next match</div>
               <div className="text-xs text-[#cce4f5]">{formatDate(fixture.date)}</div>
-              <div className="text-xs text-[#009EE0]/50">{formatTime(fixture.date)}</div>
+              <div className="text-xs text-[#e30613]/50">{formatTime(fixture.date)}</div>
             </div>
           ) : (
             <div>
               <div className="text-xs text-[#cce4f5]">{formatDate(fixture.date)}</div>
-              {!isFinished && <div className="text-xs text-[#009EE0]/50">{formatTime(fixture.date)}</div>}
+              {!isFinished && <div className="text-xs text-[#e30613]/50">{formatTime(fixture.date)}</div>}
             </div>
           )}
         </div>
 
         {/* Teams + score */}
         <div className="flex-1 flex items-center gap-2 min-w-0">
-          <div className={`flex items-center gap-1.5 flex-1 justify-end min-w-0 ${fixture.home.id === WYCOMBE_ESPN_ID ? 'font-bold text-[#009EE0]' : 'text-[#cce4f5]'}`}>
+          <div className={`flex items-center gap-1.5 flex-1 justify-end min-w-0 ${fixture.home.id === TEAM_ESPN_ID ? 'font-bold text-[#e30613]' : 'text-[#cce4f5]'}`}>
             <span className="truncate text-sm">{fixture.home.name}</span>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={fixture.home.logo} alt="" aria-hidden="true" className="w-5 h-5 object-contain shrink-0" />
@@ -93,11 +93,11 @@ function FixtureRow({
                 {fixture.home.score} – {fixture.away.score}
               </span>
             ) : (
-              <span className="text-[#009EE0]/50 text-sm font-medium">vs</span>
+              <span className="text-[#e30613]/50 text-sm font-medium">vs</span>
             )}
           </div>
 
-          <div className={`flex items-center gap-1.5 flex-1 justify-start min-w-0 ${fixture.away.id === WYCOMBE_ESPN_ID ? 'font-bold text-[#009EE0]' : 'text-[#cce4f5]'}`}>
+          <div className={`flex items-center gap-1.5 flex-1 justify-start min-w-0 ${fixture.away.id === TEAM_ESPN_ID ? 'font-bold text-[#e30613]' : 'text-[#cce4f5]'}`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={fixture.away.logo} alt="" aria-hidden="true" className="w-5 h-5 object-contain shrink-0" />
             <span className="truncate text-sm">{fixture.away.name}</span>
@@ -141,13 +141,12 @@ function FixtureRow({
       </div>
 
       {fixture.round && (
-        <div className="text-xs text-[#009EE0]/50 mt-0.5 pl-28">{fixture.round}</div>
+        <div className="text-xs text-[#e30613]/50 mt-0.5 pl-28">{fixture.round}</div>
       )}
     </div>
   )
 }
 
-const DUFF_APPOINTED = new Date('2025-09-18T00:00:00Z')
 
 export default function FixturesList({
   fixtures,
@@ -159,7 +158,6 @@ export default function FixturesList({
   const sorted = [...fixtures].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
   const nextIdx = sorted.findIndex(f => f.status === 'upcoming' || f.status === 'live')
   const nextRef = useRef<HTMLDivElement>(null)
-  const duffIdx = sorted.findIndex(f => new Date(f.date) >= DUFF_APPOINTED)
 
   useLayoutEffect(() => {
     if (nextRef.current) {
@@ -169,22 +167,13 @@ export default function FixturesList({
   }, [])
 
   if (!sorted.length) {
-    return <p className="text-[#009EE0]/50 text-sm">No fixture data available.</p>
+    return <p className="text-[#e30613]/50 text-sm">No fixture data available.</p>
   }
 
   return (
     <ol className="space-y-2 list-none" aria-label="Fixtures and results">
       {sorted.map((f, i) => (
         <li key={f.id}>
-          {i === duffIdx && (
-            <div className="flex items-center gap-3 py-2 mb-1" role="separator" aria-label="Mike Duff appointed manager">
-              <div className="flex-1 h-px bg-[#009EE0]/30" aria-hidden="true" />
-              <span className="text-xs font-semibold text-[#009EE0] whitespace-nowrap tracking-wide">
-                Mike Duff appointed — 18 Sep 2025
-              </span>
-              <div className="flex-1 h-px bg-[#009EE0]/30" aria-hidden="true" />
-            </div>
-          )}
           <FixtureRow
             fixture={f}
             isNext={i === nextIdx}

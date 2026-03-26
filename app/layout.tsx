@@ -15,8 +15,8 @@ const shareTechMono = Share_Tech_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "WWFC Fan Hub",
-  description: "Wycombe Wanderers FC – live fixtures, standings, form & news",
+  title: "BFC Fan Hub",
+  description: "Brentford FC – live fixtures, standings, form & news",
 };
 
 export default function RootLayout({

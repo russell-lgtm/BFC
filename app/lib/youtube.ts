@@ -3,7 +3,7 @@ export interface HighlightVideo {
   title: string
 }
 
-const CHANNEL_ID = 'UCR_EcVkERzNZuRiEpmmsRng'
+const CHANNEL_ID = 'UCAalMUm3LIf504ItA3rqfug'
 
 export async function getMatchHighlight(
   opponent: string,

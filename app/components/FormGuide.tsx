@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import type { Fixture, StandingEntry } from '../lib/football'
-import { WYCOMBE_ESPN_ID } from '../lib/football'
+import { TEAM_ESPN_ID } from '../lib/football'
 
 type View = 'all' | 'home' | 'away'
 type Period = 'season' | 'last10' | 'last5'
@@ -17,9 +17,9 @@ function computeForm(fixtures: Fixture[], view: View, period: Period) {
   const finished = fixtures
     .filter(f => {
       if (f.status !== 'finished') return false
-      if (view === 'home') return f.home.id === WYCOMBE_ESPN_ID
-      if (view === 'away') return f.away.id === WYCOMBE_ESPN_ID
-      return f.home.id === WYCOMBE_ESPN_ID || f.away.id === WYCOMBE_ESPN_ID
+      if (view === 'home') return f.home.id === TEAM_ESPN_ID
+      if (view === 'away') return f.away.id === TEAM_ESPN_ID
+      return f.home.id === TEAM_ESPN_ID || f.away.id === TEAM_ESPN_ID
     })
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
@@ -29,7 +29,7 @@ function computeForm(fixtures: Fixture[], view: View, period: Period) {
     finished
 
   return subset.map(f => {
-    const home = f.home.id === WYCOMBE_ESPN_ID
+    const home = f.home.id === TEAM_ESPN_ID
     const wycG = home ? (f.home.score ?? 0) : (f.away.score ?? 0)
     const oppG = home ? (f.away.score ?? 0) : (f.home.score ?? 0)
     const opp = home ? f.away : f.home
@@ -52,7 +52,7 @@ function calcRank(
   if (!standings.length || view !== 'all') return null
 
   if (period === 'season') {
-    const pos = standings.findIndex(s => s.team.id === WYCOMBE_ESPN_ID)
+    const pos = standings.findIndex(s => s.team.id === TEAM_ESPN_ID)
     return pos >= 0 ? pos + 1 : null
   }
 
@@ -124,7 +124,7 @@ export default function FormGuide({
             key={v}
             onClick={() => setView(v)}
             className={`flex-1 text-xs py-1.5 rounded-lg font-medium capitalize transition-colors
-              ${view === v ? 'bg-[#009EE0] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+              ${view === v ? 'bg-[#e30613] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
           >
             {v}
           </button>

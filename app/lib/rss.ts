@@ -2,7 +2,7 @@ import Parser from 'rss-parser'
 
 const parser = new Parser({
   timeout: 8000,
-  headers: { 'User-Agent': 'WWFC-FanHub/1.0 (fan dashboard)' },
+  headers: { 'User-Agent': 'BFC-FanHub/1.0 (fan dashboard)' },
 })
 
 export interface NewsItem {
@@ -25,66 +25,54 @@ interface FeedConfig {
   limit?: number
 }
 
-const WWFC_FEEDS: FeedConfig[] = [
-  // Google News — broad aggregator (BBC Sport, Sky Sports, Guardian, local press etc.)
+const BFC_FEEDS: FeedConfig[] = [
+  // Google News — broad aggregator
   {
-    url: 'https://news.google.com/rss/search?q=%22Wycombe+Wanderers%22&hl=en-GB&gl=GB&ceid=GB:en',
+    url: 'https://news.google.com/rss/search?q=%22Brentford%22+football&hl=en-GB&gl=GB&ceid=GB:en',
     source: 'Google News',
     type: 'article',
+    filter: 'brentford',
+    filterTitleOnly: true,
     limit: 10,
   },
-  // WWFC official news via Google News (wycombewanderers.co.uk WordPress site has been compromised)
+  // Brentford FC official news via Google News
   {
-    url: 'https://news.google.com/rss/search?q=%22Wycombe+Wanderers%22+site%3Awwfc.com&hl=en-GB&gl=GB&ceid=GB:en',
-    source: 'WWFC Official',
+    url: 'https://news.google.com/rss/search?q=%22Brentford%22+site%3Abrentfordfc.com&hl=en-GB&gl=GB&ceid=GB:en',
+    source: 'Brentford FC Official',
     type: 'article',
     limit: 8,
   },
-  // The72 — EFL-specialist, filtered to Wycombe headline stories only
+  // BBC Sport
   {
-    url: 'https://the72.co.uk/feed/',
-    source: 'The72',
-    type: 'article',
-    filter: 'wycombe',
-    filterTitleOnly: true,
-    limit: 20,
-  },
-  // Vital Wycombe — fan news / transfer rumours
-  {
-    url: 'https://wycombe.vitalfootball.co.uk/feed/',
-    source: 'Vital Wycombe',
-    type: 'article',
-    limit: 8,
-  },
-  // Local press via Google News — must mention Wycombe in headline to ensure it's the focus
-  {
-    url: 'https://news.google.com/rss/search?q=%22Wycombe+Wanderers%22+(site%3Abucksherald.co.uk+OR+site%3Abucksfreepress.co.uk+OR+site%3Agetreading.co.uk)&hl=en-GB&gl=GB&ceid=GB:en',
-    source: 'Local Press',
-    type: 'article',
-    filter: 'wycombe',
-    filterTitleOnly: true,
-    limit: 6,
-  },
-  // BBC Sport via Google News
-  {
-    url: 'https://news.google.com/rss/search?q=%22Wycombe+Wanderers%22+site%3Abbc.co.uk&hl=en-GB&gl=GB&ceid=GB:en',
+    url: 'https://news.google.com/rss/search?q=%22Brentford%22+site%3Abbc.co.uk&hl=en-GB&gl=GB&ceid=GB:en',
     source: 'BBC Sport',
     type: 'article',
+    filter: 'brentford',
+    filterTitleOnly: true,
     limit: 6,
   },
-  // Reddit — r/wycombewanderers (community discussion, match threads)
+  // Sky Sports
   {
-    url: 'https://www.reddit.com/r/wycombewanderers/.rss?limit=10',
-    source: 'r/wycombewanderers',
+    url: 'https://news.google.com/rss/search?q=%22Brentford%22+site%3Askysports.com&hl=en-GB&gl=GB&ceid=GB:en',
+    source: 'Sky Sports',
+    type: 'article',
+    filter: 'brentford',
+    filterTitleOnly: true,
+    limit: 6,
+  },
+  // Reddit — r/Brentford
+  {
+    url: 'https://www.reddit.com/r/Brentford/.rss?limit=10',
+    source: 'r/Brentford',
     type: 'reddit',
     limit: 6,
   },
-  // Reddit — r/leagueone filtered to Wycombe
+  // Reddit — r/PremierLeague filtered to Brentford
   {
-    url: 'https://www.reddit.com/r/leagueone/search.rss?q=wycombe&sort=top&t=week&limit=10',
-    source: 'r/leagueone',
+    url: 'https://www.reddit.com/r/PremierLeague/search.rss?q=brentford&sort=top&t=week&limit=10',
+    source: 'r/PremierLeague',
     type: 'reddit',
-    filter: 'wycombe',
+    filter: 'brentford',
     limit: 4,
   },
 ]
@@ -142,8 +130,7 @@ async function fetchFeed(config: FeedConfig): Promise<NewsItem[]> {
 /** Deduplicate by normalised title — keep highest-priority source version */
 function deduplicate(items: NewsItem[]): NewsItem[] {
   const seen = new Map<string, NewsItem>()
-  // Source priority — earlier = higher priority
-  const priority = ['WWFC Official', 'Bucks Herald', 'Bucks Free Press', 'Vital Wycombe', 'The72', 'Google News', 'r/wycombewanderers', 'r/leagueone']
+  const priority = ['Brentford FC Official', 'BBC Sport', 'Sky Sports', 'Google News', 'r/Brentford', 'r/PremierLeague']
   const rank = (s: string) => { const i = priority.indexOf(s); return i === -1 ? 99 : i }
 
   for (const item of items) {
@@ -157,7 +144,7 @@ function deduplicate(items: NewsItem[]): NewsItem[] {
 }
 
 export async function getNews(): Promise<NewsItem[]> {
-  const results = await Promise.all(WWFC_FEEDS.map(fetchFeed))
+  const results = await Promise.all(BFC_FEEDS.map(fetchFeed))
   const all = results.flat()
 
   const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000
@@ -177,7 +164,7 @@ export async function getNewsForTeam(teamName: string): Promise<NewsItem[]> {
       limit: 6,
     },
     {
-      url: `https://www.reddit.com/r/leagueone/search.rss?q=${encodeURIComponent(teamName)}&sort=top&t=month&limit=10`,
+      url: `https://www.reddit.com/r/PremierLeague/search.rss?q=${encodeURIComponent(teamName)}&sort=top&t=month&limit=10`,
       source: 'Reddit',
       type: 'reddit',
       filter: teamName.split(' ')[0].toLowerCase(),

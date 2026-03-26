@@ -1,4 +1,4 @@
-// Wycombe Wanderers 2024-25 kit component URLs from Wikimedia Commons
+// Brentford FC 2024-25 kit component URLs from Wikimedia Commons
 export const WWFC_KITS = {
   home: {
     body:     'https://upload.wikimedia.org/wikipedia/commons/e/eb/Kit_body_wycombe2324h.png',

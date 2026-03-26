@@ -27,7 +27,7 @@ export const TEAM_COLORS: Record<string, TeamColor> = {
   'Stockport County':   { primary: '#003090', secondary: '#FFFFFF' },
   'Wigan Athletic':     { primary: '#003E96', secondary: '#FFFFFF' },
   'Wrexham':            { primary: '#D00027', secondary: '#FFFFFF' },
-  'Wycombe Wanderers':  { primary: '#002147', secondary: '#009EE0' },
+  'Brentford FC':  { primary: '#002147', secondary: '#e30613' },
 }
 
 export function teamColor(name: string): TeamColor {

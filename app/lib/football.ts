@@ -1,6 +1,6 @@
-const SITE_API = 'https://site.api.espn.com/apis/site/v2/sports/soccer/eng.3'
-const WEB_API = 'https://site.web.api.espn.com/apis/v2/sports/soccer/eng.3'
-export const WYCOMBE_ESPN_ID = '344'
+const SITE_API = 'https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1'
+const WEB_API = 'https://site.web.api.espn.com/apis/v2/sports/soccer/eng.1'
+export const TEAM_ESPN_ID = '337'
 
 async function espnFetch(url: string, revalidate = 1800) {
   try {
@@ -102,7 +102,7 @@ function parseEvent(event: any): Fixture | null {
 
 export async function getFixtures(): Promise<Fixture[]> {
   // Past results: schedule endpoint (all events have no status field, so force 'finished')
-  const pastData = await espnFetch(`${SITE_API}/teams/${WYCOMBE_ESPN_ID}/schedule`, 900)
+  const pastData = await espnFetch(`${SITE_API}/teams/${TEAM_ESPN_ID}/schedule`, 900)
   const pastFixtures: Fixture[] = (pastData?.events ?? [])
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .map((e: any) => parseEvent(e))
@@ -119,7 +119,7 @@ export async function getFixtures(): Promise<Fixture[]> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .filter((e: any) =>
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      e.competitions?.[0]?.competitors?.some((c: any) => c.id === WYCOMBE_ESPN_ID)
+      e.competitions?.[0]?.competitors?.some((c: any) => c.id === TEAM_ESPN_ID)
     )
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .map((e: any) => parseEvent(e))
@@ -175,7 +175,7 @@ export async function getStandings(): Promise<StandingEntry[]> {
 }
 
 export async function getSquad(): Promise<Player[]> {
-  const data = await espnFetch(`${SITE_API}/teams/${WYCOMBE_ESPN_ID}/roster`, 21600)
+  const data = await espnFetch(`${SITE_API}/teams/${TEAM_ESPN_ID}/roster`, 21600)
   if (!data) return []
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -281,7 +281,7 @@ export async function getOppositionData(teamId: string): Promise<OppositionData 
     .sort((a: Fixture, b: Fixture) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
   const reverseFixture: Fixture | null = allFinished.find(
-    (f: Fixture) => f.home.id === WYCOMBE_ESPN_ID || f.away.id === WYCOMBE_ESPN_ID
+    (f: Fixture) => f.home.id === TEAM_ESPN_ID || f.away.id === TEAM_ESPN_ID
   ) ?? null
 
   const recentResults: Fixture[] = allFinished.slice(0, 10)

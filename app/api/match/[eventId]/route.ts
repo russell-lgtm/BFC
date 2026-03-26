@@ -32,7 +32,7 @@ async function fetchSummary(eventId: string) {
 // Get all WWFC match centre URLs from their sitemap (cached 24h)
 async function getWWFCMatchUrls(): Promise<string[]> {
   try {
-    const res = await fetch('https://www.wwfc.com/sitemap.xml', { next: { revalidate: 86400 } })
+    const res = await fetch('https://www.brentfordfc.com/sitemap.xml', { next: { revalidate: 86400 } })
     if (!res.ok) return []
     const xml = await res.text()
     return [...xml.matchAll(/<loc>(https:\/\/www\.wwfc\.com\/match\/mens\/[^<]+)<\/loc>/g)]
@@ -42,7 +42,7 @@ async function getWWFCMatchUrls(): Promise<string[]> {
   }
 }
 
-// WWFC match pages (Nuxt SSR) include og:title: "Wycombe Wanderers - Luton Town | 14 Mar 2026"
+// WWFC match pages (Nuxt SSR) include og:title: "Brentford FC - Luton Town | 14 Mar 2026"
 // Match the right page by checking the title contains both the opponent and the date.
 // All individual page fetches are cached 24h so only the first call is slow.
 async function findWWFCMatchCentre(opponent: string, matchDate: Date): Promise<string | null> {
@@ -103,8 +103,8 @@ async function findExternalReport(
 ): Promise<{ url: string; source: string } | null> {
   const oppFirst = opponent.split(' ')[0]
   const [skySports, the72] = await Promise.all([
-    googleNewsSearch(`"Wycombe" "${oppFirst}" match report site:skysports.com`, matchDate),
-    googleNewsSearch(`"Wycombe" "${oppFirst}" site:the72.co.uk`, matchDate),
+    googleNewsSearch(`\"Brentford" "${oppFirst}" match report site:skysports.com`, matchDate),
+    googleNewsSearch(`\"Brentford" "${oppFirst}" site:the72.co.uk`, matchDate),
   ])
   if (skySports) return { url: skySports, source: 'Sky Sports' }
   if (the72) return { url: the72, source: 'The 72' }

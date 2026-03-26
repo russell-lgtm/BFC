@@ -11,7 +11,7 @@ function timeAgo(dateStr: string) {
 function SourceBadge({ source, type }: { source: string; type: NewsItem['type'] }) {
   if (source === 'WWFC Official') {
     return (
-      <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#009EE0]/20 text-[#009EE0] border border-[#009EE0]/30">
+      <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#e30613]/20 text-[#e30613] border border-[#e30613]/30">
         {source}
       </span>
     )
@@ -63,10 +63,10 @@ export default function NewsSection({ news }: { news: NewsItem[] }) {
   const reddit = news.filter(n => n.type === 'reddit')
 
   return (
-    <section className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#009EE0]/15 p-4" style={{ boxShadow: '0 0 25px rgba(0,158,224,0.05)' }} aria-label="Latest news">
-      <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em] mb-4" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>Latest News</h2>
+    <section className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#e30613]/15 p-4" style={{ boxShadow: '0 0 25px rgba(227,6,19,0.05)' }} aria-label="Latest news">
+      <h2 className="font-bold text-lg text-[#e30613] uppercase tracking-[0.08em] mb-4" style={{ textShadow: '0 0 12px rgba(227,6,19,0.4)' }}>Latest News</h2>
       {news.length === 0 ? (
-        <p className="text-[#009EE0]/50 text-sm">No news available</p>
+        <p className="text-[#e30613]/50 text-sm">No news available</p>
       ) : (
         <div className="space-y-5">
           {/* Articles */}
@@ -78,11 +78,11 @@ export default function NewsSection({ news }: { news: NewsItem[] }) {
                   href={item.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-3 border border-[#009EE0]/20 rounded-xl hover:border-[#009EE0]/60 hover:shadow-[0_0_15px_rgba(0,158,224,0.1)] transition-all group focus:outline-none focus:ring-2 focus:ring-[#009EE0]/50"
+                  className="block p-3 border border-[#e30613]/20 rounded-xl hover:border-[#e30613]/60 hover:shadow-[0_0_15px_rgba(227,6,19,0.1)] transition-all group focus:outline-none focus:ring-2 focus:ring-[#e30613]/50"
                 >
                   <div className="flex items-center justify-between mb-1.5">
                     <SourceBadge source={item.source} type={item.type} />
-                    <span className="text-xs text-[#009EE0]/50">{timeAgo(item.pubDate)}</span>
+                    <span className="text-xs text-[#e30613]/50">{timeAgo(item.pubDate)}</span>
                   </div>
                   <h3 className="text-sm font-medium text-[#cce4f5] group-hover:text-white line-clamp-2">
                     {item.title}
@@ -98,7 +98,7 @@ export default function NewsSection({ news }: { news: NewsItem[] }) {
           {/* Reddit posts */}
           {reddit.length > 0 && (
             <div>
-              <h3 className="text-xs font-semibold text-[#009EE0]/55 uppercase tracking-[0.15em] mb-2 flex items-center gap-1.5">
+              <h3 className="text-xs font-semibold text-[#e30613]/55 uppercase tracking-[0.15em] mb-2 flex items-center gap-1.5">
                 <span className="text-orange-400" aria-hidden="true">●</span> Fan Discussion
               </h3>
               <div className="space-y-2">
@@ -108,7 +108,7 @@ export default function NewsSection({ news }: { news: NewsItem[] }) {
                     href={item.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-start gap-3 p-2.5 border border-[#009EE0]/8 rounded-xl hover:border-orange-500/40 transition-all group focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    className="flex items-start gap-3 p-2.5 border border-[#e30613]/8 rounded-xl hover:border-orange-500/40 transition-all group focus:outline-none focus:ring-2 focus:ring-orange-400"
                   >
                     <span className="text-orange-500 mt-0.5 shrink-0 text-sm font-bold" aria-hidden="true">↑</span>
                     <div className="min-w-0 flex-1">
@@ -117,7 +117,7 @@ export default function NewsSection({ news }: { news: NewsItem[] }) {
                       </p>
                       <div className="flex items-center gap-2 mt-1">
                         <SourceBadge source={item.source} type={item.type} />
-                        <span className="text-xs text-[#009EE0]/50">{timeAgo(item.pubDate)}</span>
+                        <span className="text-xs text-[#e30613]/50">{timeAgo(item.pubDate)}</span>
                       </div>
                     </div>
                   </a>

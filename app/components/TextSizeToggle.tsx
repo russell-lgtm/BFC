@@ -24,7 +24,7 @@ export default function TextSizeToggle() {
       onClick={toggle}
       aria-label={isLarge ? 'Switch to normal text size' : 'Switch to larger text size'}
       title={isLarge ? 'Normal text size' : 'Larger text size'}
-      className="shrink-0 text-sm font-bold px-2.5 py-1.5 rounded-lg border border-[#009EE0]/30 text-[#009EE0]/70 hover:text-[#009EE0] hover:border-[#009EE0]/60 hover:shadow-[0_0_8px_rgba(0,158,224,0.25)] transition-all focus:outline-none focus:ring-2 focus:ring-[#009EE0]/50"
+      className="shrink-0 text-sm font-bold px-2.5 py-1.5 rounded-lg border border-[#e30613]/30 text-[#e30613]/70 hover:text-[#e30613] hover:border-[#e30613]/60 hover:shadow-[0_0_8px_rgba(227,6,19,0.25)] transition-all focus:outline-none focus:ring-2 focus:ring-[#e30613]/50"
     >
       {isLarge ? 'A−' : 'A+'}
     </button>

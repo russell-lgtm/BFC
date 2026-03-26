@@ -2,10 +2,10 @@
 
 import Link from 'next/link'
 import type { Fixture, StandingEntry } from '../lib/football'
-import { WYCOMBE_ESPN_ID } from '../lib/football'
+import { TEAM_ESPN_ID } from '../lib/football'
 import { teamColor, isReadableOnDark } from '../lib/teamColors'
 
-function isHome(f: Fixture) { return f.home.id === WYCOMBE_ESPN_ID }
+function isHome(f: Fixture) { return f.home.id === TEAM_ESPN_ID }
 
 function getScore(f: Fixture) {
   if (f.status !== 'finished' && f.status !== 'live') return null
@@ -46,7 +46,7 @@ function FixtureCard({ f, isCenter, rank }: { f: Fixture; isCenter: boolean; ran
   const result = getResult(f)
   const opp = teamColor(opponent.name)
   const primaryReadable = isReadableOnDark(opp.primary)
-  const accentColor = primaryReadable ? opp.primary : '#009EE0'
+  const accentColor = primaryReadable ? opp.primary : '#e30613'
 
   const resultNeon =
     result === 'W' ? 'border-green-400 text-green-300' :
@@ -67,17 +67,17 @@ function FixtureCard({ f, isCenter, rank }: { f: Fixture; isCenter: boolean; ran
       aria-label={cardLabel}
       className={`flex-shrink-0 flex flex-col items-center rounded-xl overflow-hidden gap-1.5 ${cardW} ${
         isCenter
-          ? 'bg-[#020e1e] border border-[#009EE0]/50'
-          : 'bg-[#060f1a] border border-[#009EE0]/10'
+          ? 'bg-[#020e1e] border border-[#e30613]/50'
+          : 'bg-[#060f1a] border border-[#e30613]/10'
       }`}
-      style={isCenter ? { boxShadow: '0 0 30px rgba(0,158,224,0.18), inset 0 0 20px rgba(0,158,224,0.02)' } : undefined}
+      style={isCenter ? { boxShadow: '0 0 30px rgba(227,6,19,0.18), inset 0 0 20px rgba(227,6,19,0.02)' } : undefined}
     >
       <div className="w-full h-0.5 shrink-0" style={{ backgroundColor: accentColor }} aria-hidden="true" />
 
       <div className="flex flex-col items-center gap-1.5 px-3 pb-3 w-full">
         <span className={`text-xs font-semibold px-2 py-0.5 rounded uppercase tracking-wider ${
           home
-            ? isCenter ? 'border border-[#009EE0]/60 text-[#009EE0]' : 'border border-[#009EE0]/20 text-[#009EE0]'
+            ? isCenter ? 'border border-[#e30613]/60 text-[#e30613]' : 'border border-[#e30613]/20 text-[#e30613]'
             : isCenter ? 'border border-white/20 text-[#cce4f5]' : 'border border-white/10 text-[#cce4f5]'
         }`}>
           {home ? 'HOME' : 'AWAY'}
@@ -125,8 +125,8 @@ function FixtureCard({ f, isCenter, rank }: { f: Fixture; isCenter: boolean; ran
         ) : (
           <div className="flex flex-col items-center mt-0.5">
             <span
-              className={`font-semibold ${isCenter ? 'text-sm text-[#009EE0]' : 'text-xs text-[#009EE0]'}`}
-              style={isCenter ? { textShadow: '0 0 8px rgba(0,158,224,0.5)' } : undefined}
+              className={`font-semibold ${isCenter ? 'text-sm text-[#e30613]' : 'text-xs text-[#e30613]'}`}
+              style={isCenter ? { textShadow: '0 0 8px rgba(227,6,19,0.5)' } : undefined}
             >
               {formatDate(f.date)}
             </span>
@@ -137,7 +137,7 @@ function FixtureCard({ f, isCenter, rank }: { f: Fixture; isCenter: boolean; ran
         )}
 
         {f.round && (
-          <span className="text-xs text-center mt-auto text-[#009EE0]">
+          <span className="text-xs text-center mt-auto text-[#e30613]">
             {f.round}
           </span>
         )}
@@ -149,8 +149,8 @@ function FixtureCard({ f, isCenter, rank }: { f: Fixture; isCenter: boolean; ran
 export default function FixturesSection({ fixtures, standings }: { fixtures: Fixture[]; standings: StandingEntry[] }) {
   if (!fixtures?.length) {
     return (
-      <section className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#009EE0]/15 p-4" aria-label="Fixtures and results">
-        <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em] mb-2" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>Fixtures &amp; Results</h2>
+      <section className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#e30613]/15 p-4" aria-label="Fixtures and results">
+        <h2 className="font-bold text-lg text-[#e30613] uppercase tracking-[0.08em] mb-2" style={{ textShadow: '0 0 12px rgba(227,6,19,0.4)' }}>Fixtures &amp; Results</h2>
         <p className="text-[#cce4f5] text-sm">No fixture data available</p>
       </section>
     )
@@ -168,16 +168,16 @@ export default function FixturesSection({ fixtures, standings }: { fixtures: Fix
 
   return (
     <section
-      className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#009EE0]/15 p-4"
-      style={{ boxShadow: '0 0 25px rgba(0,158,224,0.05)' }}
+      className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#e30613]/15 p-4"
+      style={{ boxShadow: '0 0 25px rgba(227,6,19,0.05)' }}
       aria-label="Fixtures and results"
     >
       <div className="flex items-center justify-between mb-4">
-        <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em]" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>Fixtures &amp; Results</h2>
+        <h2 className="font-bold text-lg text-[#e30613] uppercase tracking-[0.08em]" style={{ textShadow: '0 0 12px rgba(227,6,19,0.4)' }}>Fixtures &amp; Results</h2>
         <Link
           href="/fixtures"
-          className="text-xs border border-[#009EE0]/40 text-[#009EE0] px-3 py-1.5 rounded font-semibold uppercase tracking-wider hover:bg-[#009EE0]/8 hover:border-[#009EE0]/80 transition-all focus:outline-none focus:ring-2 focus:ring-[#009EE0]/50"
-          style={{ textShadow: '0 0 8px rgba(0,158,224,0.4)' }}
+          className="text-xs border border-[#e30613]/40 text-[#e30613] px-3 py-1.5 rounded font-semibold uppercase tracking-wider hover:bg-[#e30613]/8 hover:border-[#e30613]/80 transition-all focus:outline-none focus:ring-2 focus:ring-[#e30613]/50"
+          style={{ textShadow: '0 0 8px rgba(227,6,19,0.4)' }}
         >
           View all
         </Link>

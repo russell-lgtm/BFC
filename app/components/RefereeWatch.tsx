@@ -24,13 +24,13 @@ export default function RefereeWatch({ stats }: { stats: RefereeStats | null }) 
   if (!stats) {
     return (
       <section
-        className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#009EE0]/15 overflow-hidden"
-        style={{ boxShadow: '0 0 25px rgba(0,158,224,0.05)' }}
+        className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#e30613]/15 overflow-hidden"
+        style={{ boxShadow: '0 0 25px rgba(227,6,19,0.05)' }}
         aria-label="Referee Watch"
       >
         <div className="h-1 w-full bg-[#f5c518]" style={{ boxShadow: '0 0 8px rgba(245,197,24,0.3)' }} aria-hidden="true" />
         <div className="p-4">
-          <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em] mb-2" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>Referee Watch</h2>
+          <h2 className="font-bold text-lg text-[#e30613] uppercase tracking-[0.08em] mb-2" style={{ textShadow: '0 0 12px rgba(227,6,19,0.4)' }}>Referee Watch</h2>
           <p className="text-[#cce4f5] text-sm">Referee not yet announced for next fixture.</p>
         </div>
         <div className="h-1 w-full bg-[#f5c518]" style={{ boxShadow: '0 0 8px rgba(245,197,24,0.3)' }} aria-hidden="true" />
@@ -38,26 +38,26 @@ export default function RefereeWatch({ stats }: { stats: RefereeStats | null }) 
     )
   }
 
-  const { name, gamesWithWycombe, wycombeRecord, yellowCards, redCards } = stats
-  const totalWycGames = wycombeRecord.w + wycombeRecord.d + wycombeRecord.l
+  const { name, gamesWithTeam, teamRecord, yellowCards, redCards } = stats
+  const totalWycGames = teamRecord.w + teamRecord.d + teamRecord.l
 
   return (
     <section
-      className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#009EE0]/15 overflow-hidden"
-      style={{ boxShadow: '0 0 25px rgba(0,158,224,0.05)' }}
+      className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#e30613]/15 overflow-hidden"
+      style={{ boxShadow: '0 0 25px rgba(227,6,19,0.05)' }}
       aria-label={`Referee Watch: ${name}`}
     >
       {/* Yellow top stripe — classic referee yellow */}
       <div className="h-1 w-full bg-[#f5c518]" style={{ boxShadow: '0 0 8px rgba(245,197,24,0.3)' }} aria-hidden="true" />
 
       <div className="p-4">
-        <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em] mb-4" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>Referee Watch</h2>
+        <h2 className="font-bold text-lg text-[#e30613] uppercase tracking-[0.08em] mb-4" style={{ textShadow: '0 0 12px rgba(227,6,19,0.4)' }}>Referee Watch</h2>
 
         <div className="flex items-start gap-5">
           {/* Avatar */}
           <div className="shrink-0">
             <RefereeAvatar />
-            <p className="text-center text-xs text-[#009EE0]/50 mt-1.5 max-w-[72px] leading-tight">
+            <p className="text-center text-xs text-[#e30613]/50 mt-1.5 max-w-[72px] leading-tight">
               {name}
             </p>
           </div>
@@ -66,62 +66,62 @@ export default function RefereeWatch({ stats }: { stats: RefereeStats | null }) 
           <div className="flex-1 min-w-0 space-y-4">
             {/* Wycombe record with this referee */}
             <div>
-              <h3 className="text-xs font-semibold text-[#009EE0] uppercase tracking-[0.15em] mb-2">
-                Wycombe Record This Season
-                {gamesWithWycombe === 0 && (
-                  <span className="ml-2 text-[#009EE0]/30 normal-case tracking-normal font-normal">
-                    (first Wycombe game)
+              <h3 className="text-xs font-semibold text-[#e30613] uppercase tracking-[0.15em] mb-2">
+                Team Record This Season
+                {gamesWithTeam === 0 && (
+                  <span className="ml-2 text-[#e30613]/30 normal-case tracking-normal font-normal">
+                    (first Brentford game)
                   </span>
                 )}
               </h3>
               {totalWycGames > 0 ? (
                 <div className="grid grid-cols-3 gap-2">
                   {[
-                    { label: 'W', value: wycombeRecord.w, color: 'text-green-400', full: 'Wins' },
-                    { label: 'D', value: wycombeRecord.d, color: 'text-amber-400', full: 'Draws' },
-                    { label: 'L', value: wycombeRecord.l, color: 'text-red-400', full: 'Losses' },
+                    { label: 'W', value: teamRecord.w, color: 'text-green-400', full: 'Wins' },
+                    { label: 'D', value: teamRecord.d, color: 'text-amber-400', full: 'Draws' },
+                    { label: 'L', value: teamRecord.l, color: 'text-red-400', full: 'Losses' },
                   ].map(({ label, value, color, full }) => (
                     <div
                       key={label}
-                      className="bg-[#030b14] border border-[#009EE0]/10 rounded-lg py-2 flex flex-col items-center"
+                      className="bg-[#030b14] border border-[#e30613]/10 rounded-lg py-2 flex flex-col items-center"
                       aria-label={`${full}: ${value}`}
                     >
                       <span className={`text-lg font-bold ${color}`} aria-hidden="true">{value}</span>
-                      <span className="text-xs text-[#009EE0]" aria-hidden="true">{label}</span>
+                      <span className="text-xs text-[#e30613]" aria-hidden="true">{label}</span>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-[#cce4f5]">No previous Wycombe games with this referee this season.</p>
+                <p className="text-sm text-[#cce4f5]">No previous Brentford games with this referee this season.</p>
               )}
             </div>
 
-            {/* Cards in Wycombe games */}
+            {/* Cards in Brentford games */}
             {totalWycGames > 0 && (
               <div>
-                <h3 className="text-xs font-semibold text-[#009EE0] uppercase tracking-[0.15em] mb-2">
+                <h3 className="text-xs font-semibold text-[#e30613] uppercase tracking-[0.15em] mb-2">
                   Cards in Wycombe Games
                 </h3>
                 <div className="grid grid-cols-2 gap-2">
                   <div
-                    className="bg-[#030b14] border border-[#009EE0]/10 rounded-lg py-2 flex items-center justify-center gap-2"
+                    className="bg-[#030b14] border border-[#e30613]/10 rounded-lg py-2 flex items-center justify-center gap-2"
                     aria-label={`Yellow cards: ${yellowCards}`}
                   >
                     <span className="w-3 h-4 rounded-sm bg-[#f5c518] shrink-0" style={{ boxShadow: '0 0 8px rgba(245,197,24,0.3)' }} aria-hidden="true" />
                     <span className="text-lg font-bold text-[#f5c518]" aria-hidden="true">{yellowCards}</span>
-                    <span className="text-xs text-[#009EE0]">Yellow</span>
+                    <span className="text-xs text-[#e30613]">Yellow</span>
                   </div>
                   <div
-                    className="bg-[#030b14] border border-[#009EE0]/10 rounded-lg py-2 flex items-center justify-center gap-2"
+                    className="bg-[#030b14] border border-[#e30613]/10 rounded-lg py-2 flex items-center justify-center gap-2"
                     aria-label={`Red cards: ${redCards}`}
                   >
                     <span className="w-3 h-4 rounded-sm bg-red-500 shrink-0" aria-hidden="true" />
                     <span className="text-lg font-bold text-red-400" aria-hidden="true">{redCards}</span>
-                    <span className="text-xs text-[#009EE0]">Red</span>
+                    <span className="text-xs text-[#e30613]">Red</span>
                   </div>
                 </div>
-                <p className="text-xs text-[#009EE0] mt-1.5">
-                  Across {gamesWithWycombe} Wycombe game{gamesWithWycombe !== 1 ? 's' : ''} this season
+                <p className="text-xs text-[#e30613] mt-1.5">
+                  Across {gamesWithTeam} Brentford game{gamesWithTeam !== 1 ? 's' : ''} this season
                 </p>
               </div>
             )}

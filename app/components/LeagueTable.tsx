@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import type { StandingEntry, Fixture } from '../lib/football'
-import { WYCOMBE_ESPN_ID } from '../lib/football'
+import { TEAM_ESPN_ID } from '../lib/football'
 
 type Period = 'season' | 'last10' | 'last5'
 type View = 'all' | 'home' | 'away'
@@ -90,7 +90,7 @@ function formPPG(form: string) {
 
 // Render oldest→newest left-to-right (rightmost = most recent)
 function FormDots({ form }: { form: string }) {
-  if (!form) return <span className="text-[#009EE0]/50 text-xs">–</span>
+  if (!form) return <span className="text-[#e30613]/50 text-xs">–</span>
   return (
     <div className="flex gap-0.5" aria-label={`Form: ${form.split('').reverse().map(r => r === 'W' ? 'Win' : r === 'D' ? 'Draw' : 'Loss').join(', ')}`}>
       {form.split('').reverse().map((r, i) => (
@@ -145,14 +145,14 @@ export default function LeagueTable({
 
   if (!standings?.length) {
     return (
-      <section className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#009EE0]/15 p-4" style={{ boxShadow: '0 0 25px rgba(0,158,224,0.05)' }} aria-label="League table">
-        <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em] mb-2" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>League Table</h2>
+      <section className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#e30613]/15 p-4" style={{ boxShadow: '0 0 25px rgba(227,6,19,0.05)' }} aria-label="League table">
+        <h2 className="font-bold text-lg text-[#e30613] uppercase tracking-[0.08em] mb-2" style={{ textShadow: '0 0 12px rgba(227,6,19,0.4)' }}>League Table</h2>
         <p className="text-[#cce4f5] text-sm">No standings data available</p>
       </section>
     )
   }
 
-  const wycIdx = tableData.findIndex(s => s.team.id === WYCOMBE_ESPN_ID)
+  const wycIdx = tableData.findIndex(s => s.team.id === TEAM_ESPN_ID)
   const rows = expanded
     ? tableData
     : tableData.slice(Math.max(0, wycIdx - 3), Math.min(tableData.length, wycIdx + 4))
@@ -160,11 +160,11 @@ export default function LeagueTable({
   const periodLabel = period === 'season' ? 'Season' : period === 'last10' ? 'Last 10' : 'Last 5'
 
   return (
-    <section className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#009EE0]/15 p-4" style={{ boxShadow: '0 0 25px rgba(0,158,224,0.05)' }} aria-label="League table">
+    <section className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#e30613]/15 p-4" style={{ boxShadow: '0 0 25px rgba(227,6,19,0.05)' }} aria-label="League table">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="font-bold text-lg text-[#009EE0] uppercase tracking-[0.08em]" style={{ textShadow: '0 0 12px rgba(0,158,224,0.4)' }}>League Table</h2>
+        <h2 className="font-bold text-lg text-[#e30613] uppercase tracking-[0.08em]" style={{ textShadow: '0 0 12px rgba(227,6,19,0.4)' }}>League Table</h2>
         {period !== 'season' && (
-          <span className="text-xs text-[#009EE0] italic">{periodLabel} · all metrics recomputed</span>
+          <span className="text-xs text-[#e30613] italic">{periodLabel} · all metrics recomputed</span>
         )}
       </div>
 
@@ -177,10 +177,10 @@ export default function LeagueTable({
               key={p}
               onClick={() => setPeriod(p)}
               aria-pressed={period === p}
-              className={`flex-1 text-xs py-1.5 px-3 rounded-lg font-medium transition-all whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-[#009EE0]/50
+              className={`flex-1 text-xs py-1.5 px-3 rounded-lg font-medium transition-all whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-[#e30613]/50
                 ${period === p
-                  ? 'border border-[#009EE0]/60 text-[#009EE0] bg-[#009EE0]/10'
-                  : 'border border-[#009EE0]/10 text-[#cce4f5]/50 bg-[#030b14] hover:border-[#009EE0]/30 hover:text-[#cce4f5]/80'}`}
+                  ? 'border border-[#e30613]/60 text-[#e30613] bg-[#e30613]/10'
+                  : 'border border-[#e30613]/10 text-[#cce4f5]/50 bg-[#030b14] hover:border-[#e30613]/30 hover:text-[#cce4f5]/80'}`}
             >
               {p === 'season' ? 'Season' : p === 'last10' ? 'Last 10' : 'Last 5'}
             </button>
@@ -193,10 +193,10 @@ export default function LeagueTable({
               key={v}
               onClick={() => setView(v)}
               aria-pressed={view === v}
-              className={`flex-1 text-xs py-1.5 px-3 rounded-lg font-medium capitalize transition-all focus:outline-none focus:ring-2 focus:ring-[#009EE0]/50
+              className={`flex-1 text-xs py-1.5 px-3 rounded-lg font-medium capitalize transition-all focus:outline-none focus:ring-2 focus:ring-[#e30613]/50
                 ${view === v
-                  ? 'border border-[#009EE0]/60 text-[#009EE0] bg-[#009EE0]/10'
-                  : 'border border-[#009EE0]/10 text-[#cce4f5]/50 bg-[#030b14] hover:border-[#009EE0]/30 hover:text-[#cce4f5]/80'}`}
+                  ? 'border border-[#e30613]/60 text-[#e30613] bg-[#e30613]/10'
+                  : 'border border-[#e30613]/10 text-[#cce4f5]/50 bg-[#030b14] hover:border-[#e30613]/30 hover:text-[#cce4f5]/80'}`}
             >
               {v}
             </button>
@@ -208,7 +208,7 @@ export default function LeagueTable({
       <div className="overflow-x-auto">
         <table className="w-full text-sm" aria-label="League standings">
           <thead>
-            <tr className="text-[#009EE0]/50 text-xs border-b border-[#009EE0]/8">
+            <tr className="text-[#e30613]/50 text-xs border-b border-[#e30613]/8">
               <th scope="col" className="text-left pb-2 pr-3 w-6">#</th>
               <th scope="col" className="text-left pb-2 pr-6">Team</th>
               <th scope="col" className="text-center pb-2 px-3">P</th>
@@ -223,18 +223,18 @@ export default function LeagueTable({
           </thead>
           <tbody>
             {rows.map(s => {
-              const isWyc = s.team.id === WYCOMBE_ESPN_ID
-              const gdColor = s.gd > 0 ? 'text-green-400' : s.gd < 0 ? 'text-red-400' : 'text-[#009EE0]/50'
+              const isWyc = s.team.id === TEAM_ESPN_ID
+              const gdColor = s.gd > 0 ? 'text-green-400' : s.gd < 0 ? 'text-red-400' : 'text-[#e30613]/50'
               return (
-                <tr key={s.team.id} className={`border-t border-[#009EE0]/8 ${isWyc ? 'bg-[#009EE0]/8 border-t border-[#009EE0]/15' : ''}`}>
-                  <td className={`py-2.5 pr-3 text-xs ${isWyc ? 'font-bold text-[#009EE0]' : 'text-[#009EE0]'}`}>
+                <tr key={s.team.id} className={`border-t border-[#e30613]/8 ${isWyc ? 'bg-[#e30613]/8 border-t border-[#e30613]/15' : ''}`}>
+                  <td className={`py-2.5 pr-3 text-xs ${isWyc ? 'font-bold text-[#e30613]' : 'text-[#e30613]'}`}>
                     {s.rank}
                   </td>
                   <td className="py-2.5 pr-6">
                     <div className="flex items-center gap-2">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={s.team.logo} alt="" aria-hidden="true" className="w-5 h-5 object-contain shrink-0" />
-                      <span className={`truncate max-w-[140px] ${isWyc ? 'font-bold text-[#009EE0]' : 'text-[#cce4f5]'}`}>
+                      <span className={`truncate max-w-[140px] ${isWyc ? 'font-bold text-[#e30613]' : 'text-[#cce4f5]'}`}>
                         {s.team.name}
                       </span>
                     </div>
@@ -246,8 +246,8 @@ export default function LeagueTable({
                   <td className={`text-center py-2.5 px-3 text-xs ${gdColor}`}>
                     {s.gd > 0 ? '+' : ''}{s.gd}
                   </td>
-                  <td className={`text-center py-2.5 px-3 font-bold ${isWyc ? 'text-[#009EE0]' : 'text-[#cce4f5]'}`}
-                    style={isWyc ? { textShadow: '0 0 8px rgba(0,158,224,0.5)' } : undefined}>
+                  <td className={`text-center py-2.5 px-3 font-bold ${isWyc ? 'text-[#e30613]' : 'text-[#cce4f5]'}`}
+                    style={isWyc ? { textShadow: '0 0 8px rgba(227,6,19,0.5)' } : undefined}>
                     {s.points}
                   </td>
                   <td className="text-center py-2.5 px-3 hidden sm:table-cell">
@@ -269,8 +269,8 @@ export default function LeagueTable({
         onClick={() => setExpanded(e => !e)}
         aria-expanded={expanded}
         aria-controls="league-table-body"
-        className="mt-4 w-full text-center text-sm py-2 rounded-lg border border-[#009EE0]/45 text-[#009EE0] font-semibold uppercase tracking-wider hover:bg-[#009EE0]/8 hover:border-[#009EE0] transition-all focus:outline-none focus:ring-2 focus:ring-[#009EE0]/50"
-        style={{ textShadow: '0 0 8px rgba(0,158,224,0.4)' }}
+        className="mt-4 w-full text-center text-sm py-2 rounded-lg border border-[#e30613]/45 text-[#e30613] font-semibold uppercase tracking-wider hover:bg-[#e30613]/8 hover:border-[#e30613] transition-all focus:outline-none focus:ring-2 focus:ring-[#e30613]/50"
+        style={{ textShadow: '0 0 8px rgba(227,6,19,0.4)' }}
       >
         {expanded ? 'Show less' : `Show full table (${standings.length} teams)`}
       </button>

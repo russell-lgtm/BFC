@@ -1,5 +1,5 @@
 import type { Fixture } from '../lib/football'
-import { WYCOMBE_ESPN_ID } from '../lib/football'
+import { TEAM_ESPN_ID } from '../lib/football'
 import { teamColor } from '../lib/teamColors'
 
 function formatMatchDate(dateStr: string) {
@@ -17,7 +17,7 @@ export default function MatchHero({
 }) {
   if (!lastResult) return null
 
-  const isHome = lastResult.home.id === WYCOMBE_ESPN_ID
+  const isHome = lastResult.home.id === TEAM_ESPN_ID
   const opponent = isHome ? lastResult.away : lastResult.home
   const scored = isHome ? (lastResult.home.score ?? 0) : (lastResult.away.score ?? 0)
   const conceded = isHome ? (lastResult.away.score ?? 0) : (lastResult.home.score ?? 0)
@@ -57,7 +57,7 @@ export default function MatchHero({
       <div className="relative px-5 pt-5 pb-4 text-white">
         {/* Meta row */}
         <div className="flex items-center justify-between mb-4">
-          <span className="text-xs font-semibold text-[#009EE0] uppercase tracking-widest">
+          <span className="text-xs font-semibold text-[#e30613] uppercase tracking-widest">
             Last Result
           </span>
           <div className="flex items-center gap-2">
@@ -77,8 +77,8 @@ export default function MatchHero({
           <div className="flex flex-col items-center gap-1.5 w-24">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="https://a.espncdn.com/i/teamlogos/soccer/500/344.png"
-              alt="Wycombe Wanderers"
+              src="https://a.espncdn.com/i/teamlogos/soccer/500/337.png"
+              alt="Brentford FC"
               className="w-14 h-14 object-contain drop-shadow-lg"
             />
             <span className="text-xs font-semibold text-center text-blue-100 leading-tight">
@@ -90,7 +90,7 @@ export default function MatchHero({
           <div className="flex flex-col items-center">
             <div className="text-5xl font-black tracking-tighter tabular-nums">
               {scored}
-              <span className="text-[#009EE0] mx-1">–</span>
+              <span className="text-[#e30613] mx-1">–</span>
               {conceded}
             </div>
             <span className="text-xs text-blue-300 mt-1 capitalize">

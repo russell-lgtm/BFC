@@ -3,8 +3,8 @@
 :root {
   --background: #010810;
   --foreground: #cce4f5;
-  --wwfc-navy: #002147;
-  --wwfc-blue: #009EE0;
+  --club-dark: #14000a;
+  --club-color: #e30613;
   --surface: #060f1a;
   --surface-elevated: #091627;
 }
@@ -14,8 +14,8 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-chakra), sans-serif;
   --font-mono: var(--font-mono), monospace;
-  --color-wwfc-navy: var(--wwfc-navy);
-  --color-wwfc-blue: var(--wwfc-blue);
+  --color-club-dark: var(--wwfc-navy);
+  --color-club-color: var(--wwfc-blue);
   --color-surface: var(--surface);
   --color-surface-elevated: var(--surface-elevated);
 }
@@ -33,7 +33,7 @@ html.large-text {
 
 /* Focus rings */
 :focus-visible {
-  outline: 2px solid #009EE0;
+  outline: 2px solid #e30613;
   outline-offset: 2px;
   box-shadow: 0 0 0 4px rgba(0, 158, 224, 0.12);
 }
