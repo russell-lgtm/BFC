@@ -65,7 +65,7 @@ function FixtureCard({ f, isCenter, rank }: { f: Fixture; isCenter: boolean; ran
   return (
     <div
       aria-label={cardLabel}
-      className={`flex-shrink-0 flex flex-col items-center rounded-xl overflow-hidden gap-1.5 ${cardW} ${
+      className={`flex-shrink-0 flex flex-col items-center rounded-xl overflow-hidden gap-1.5 h-full ${cardW} ${
         isCenter
           ? 'bg-[#020e1e] border border-[#e30613]/50'
           : 'bg-[#060f1a] border border-[#e30613]/10'
@@ -182,7 +182,7 @@ export default function FixturesSection({ fixtures, standings }: { fixtures: Fix
           View all
         </Link>
       </div>
-      <div className="flex gap-3 overflow-x-auto pb-2 justify-start sm:justify-center items-center" role="list" aria-label="Recent and upcoming fixtures">
+      <div className="flex gap-3 overflow-x-auto pb-2 justify-start sm:justify-center items-stretch" role="list" aria-label="Recent and upcoming fixtures">
         {display.map(f => {
           const opponentId = isHome(f) ? f.away.id : f.home.id
           return (

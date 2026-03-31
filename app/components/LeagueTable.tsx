@@ -9,7 +9,6 @@ type View = 'all' | 'home' | 'away'
 
 interface RowData extends StandingEntry {
   form: string
-  seasonPPG: string | null // non-null only for season + home/away view
 }
 
 function computePeriodStats(
@@ -46,7 +45,7 @@ function computePeriodStats(
     played: games.length, won, drawn, lost, gf, ga,
     gd: gf - ga,
     points: won * 3 + drawn,
-    form: formChars.join(''), // newest-first (will be reversed for display)
+    form: formChars.slice(0, 10).join(''), // newest-first, capped at 10 for display
   }
 }
 
@@ -82,11 +81,6 @@ function seasonFormAndPPG(teamId: string, results: Fixture[], view: View): { for
   return { form, ppg }
 }
 
-function formPPG(form: string) {
-  if (!form.length) return '–'
-  const pts = form.split('').reduce((p, r) => p + (r === 'W' ? 3 : r === 'D' ? 1 : 0), 0)
-  return (pts / form.length).toFixed(1)
-}
 
 // Render oldest→newest left-to-right (rightmost = most recent)
 function FormDots({ form }: { form: string }) {
@@ -121,18 +115,21 @@ export default function LeagueTable({
   // Build the full ranked table for the selected period/view
   const tableData: RowData[] = useMemo(() => {
     if (!standings?.length) return []
-    if (period === 'season') {
+
+    // Only season+all uses ESPN official standings (includes deductions etc.)
+    if (period === 'season' && view === 'all') {
       return standings.map(s => {
-        const { form, ppg } = seasonFormAndPPG(s.team.id, recentResults, view)
-        return { ...s, form, seasonPPG: ppg }
+        const { form } = seasonFormAndPPG(s.team.id, recentResults, 'all')
+        return { ...s, form }
       })
     }
 
-    const limit = period === 'last5' ? 5 : 10
+    // All other combinations: recompute stats from match results and re-rank
+    const limit = period === 'last5' ? 5 : period === 'last10' ? 10 : 9999
     return standings
       .map(s => {
         const ps = computePeriodStats(s.team.id, recentResults, view, limit)
-        return { ...s, ...ps, seasonPPG: null }
+        return { ...s, ...ps }
       })
       .sort((a, b) =>
         b.points - a.points ||
@@ -254,9 +251,7 @@ export default function LeagueTable({
                     <FormDots form={s.form} />
                   </td>
                   <td className="text-center py-2.5 pl-3 text-xs text-[#cce4f5] hidden sm:table-cell">
-                    {period === 'season'
-                      ? (s.seasonPPG ?? (s.played > 0 ? (s.points / s.played).toFixed(1) : '–'))
-                      : formPPG(s.form)}
+                    {s.played > 0 ? (s.points / s.played).toFixed(1) : '–'}
                   </td>
                 </tr>
               )

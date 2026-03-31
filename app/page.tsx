@@ -7,6 +7,7 @@ import SquadSection from './components/SquadSection'
 import NewsSection from './components/NewsSection'
 import OppositionWatch from './components/OppositionWatch'
 import RefereeWatch from './components/RefereeWatch'
+import VenueFormSection from './components/VenueFormSection'
 import TextSizeToggle from './components/TextSizeToggle'
 
 export const revalidate = 900
@@ -51,7 +52,32 @@ export default async function Home() {
     ? standingsData.find(s => s.team.id === nextOpponentId)
     : undefined
 
-  const wycPos = standingsData.find(s => s.team.id === '344')
+  const wycPos = standingsData.find(s => s.team.id === TEAM_ESPN_ID)
+
+  // Venue form: our last 5 home/away games vs opponent's last 5 away/home games
+  const wycIsHome = nextMatch ? nextMatch.home.id === TEAM_ESPN_ID : null
+  let wycVenueForm: string[] = []
+  let oppVenueForm: string[] = []
+  if (nextMatch && wycIsHome !== null) {
+    const wycGames = recentData
+      .filter(f => f.status === 'finished' && (wycIsHome ? f.home.id === TEAM_ESPN_ID : f.away.id === TEAM_ESPN_ID))
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 5)
+    wycVenueForm = wycGames.map(f => {
+      const scored = f.home.id === TEAM_ESPN_ID ? (f.home.score ?? 0) : (f.away.score ?? 0)
+      const conceded = f.home.id === TEAM_ESPN_ID ? (f.away.score ?? 0) : (f.home.score ?? 0)
+      return scored > conceded ? 'W' : scored === conceded ? 'D' : 'L'
+    })
+    const oppGames = (oppData?.recentResults ?? [])
+      .filter(f => wycIsHome ? f.away.id === nextOpponentId : f.home.id === nextOpponentId)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 5)
+    oppVenueForm = oppGames.map(f => {
+      const scored = f.home.id === nextOpponentId ? (f.home.score ?? 0) : (f.away.score ?? 0)
+      const conceded = f.home.id === nextOpponentId ? (f.away.score ?? 0) : (f.home.score ?? 0)
+      return scored > conceded ? 'W' : scored === conceded ? 'D' : 'L'
+    })
+  }
 
   return (
     <>
@@ -86,7 +112,7 @@ export default async function Home() {
                 </h1>
                 {wycPos && (
                   <p className="text-xs font-medium mt-0.5 flex items-center gap-2 flex-wrap">
-                    <span className="text-[#e30613] uppercase tracking-wider">League One</span>
+                    <span className="text-[#e30613] uppercase tracking-wider">Premier League</span>
                     <span className="text-[#e30613]">·</span>
                     <span className="text-[#cce4f5] font-bold">{wycPos.rank}{['th','st','nd','rd'][(wycPos.rank % 100 - 20) % 10] || ['th','st','nd','rd'][wycPos.rank % 100] || 'th'}</span>
                     <span className="text-[#e30613]">P</span><span className="text-[#cce4f5]">{wycPos.played}</span>
@@ -104,6 +130,24 @@ export default async function Home() {
 
         <div className="max-w-5xl mx-auto px-4 py-6 space-y-5">
           <FixturesSection fixtures={fixturesData} standings={standingsData} />
+          {nextMatch && wycIsHome !== null && (
+            <VenueFormSection
+              ourTeam={{
+                name: 'Brentford FC',
+                logo: `https://a.espncdn.com/i/teamlogos/soccer/500/337.png`,
+                venue: wycIsHome ? 'home' : 'away',
+                form: wycVenueForm,
+              }}
+              oppTeam={{
+                name: nextOpponentName!,
+                logo: wycIsHome ? nextMatch.away.logo : nextMatch.home.logo,
+                venue: wycIsHome ? 'away' : 'home',
+                form: oppVenueForm,
+              }}
+              accentColor="#e30613"
+              accentRgb="227,6,19"
+            />
+          )}
           {nextMatch && (
             <OppositionWatch
               nextFixture={nextMatch}

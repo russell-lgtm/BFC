@@ -117,6 +117,7 @@ function FixtureRow({
           )}
         </div>
 
+
       </div>
 
       {fixture.round && (

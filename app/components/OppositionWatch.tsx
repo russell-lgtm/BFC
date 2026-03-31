@@ -1,4 +1,4 @@
-import type { Fixture, OppositionData, StandingEntry } from '../lib/football'
+import type { Fixture, MatchEvent, OppositionData, StandingEntry } from '../lib/football'
 import { TEAM_ESPN_ID } from '../lib/football'
 import { teamColor } from '../lib/teamColors'
 import type { NewsItem } from '../lib/rss'
@@ -70,6 +70,9 @@ export default function OppositionWatch({
 
   // Reverse fixture: the already-played game between Wycombe and this opponent
   const reverseFixture = oppData?.reverseFixture ?? null
+  const reverseEvents: MatchEvent[] = oppData?.reverseFixtureEvents ?? []
+  const reverseGoals = reverseEvents.filter(e => ['goal', 'ownGoal', 'penalty'].includes(e.type))
+  const reverseReds = reverseEvents.filter(e => ['redCard', 'yellowRed'].includes(e.type))
 
   return (
     <section className="bg-[#060f1a]/96 backdrop-blur-sm rounded-xl border border-[#e30613]/15 overflow-hidden" style={{ boxShadow: '0 0 25px rgba(227,6,19,0.05)' }} aria-label={`Opposition Report: ${opponent.name}`}>
@@ -183,18 +186,58 @@ export default function OppositionWatch({
                   <h3 className="text-xs font-semibold text-[#e30613] uppercase tracking-[0.15em] mb-2">
                     Reverse Fixture
                   </h3>
-                  <div className="bg-[#091627]/80 rounded-xl p-3 flex items-center justify-between" aria-label={`Reverse fixture on ${matchDate}: ${reverseFixture.home.score}–${reverseFixture.away.score}, Wycombe ${result === 'W' ? 'won' : result === 'L' ? 'lost' : 'drew'}`}>
-                    <div className="text-xs text-[#e30613]">{matchDate} · {wycHome ? 'Home' : 'Away'}</div>
-                    <div className={`text-lg font-bold tabular-nums ${resultColor}`} aria-hidden="true">
-                      {reverseFixture.home.score} – {reverseFixture.away.score}
+                  <div className="bg-[#091627]/80 rounded-xl p-3" aria-label={`Reverse fixture on ${matchDate}: ${reverseFixture.home.score}–${reverseFixture.away.score}, Brentford ${result === 'W' ? 'won' : result === 'L' ? 'lost' : 'drew'}`}>
+                    <div className="flex items-center justify-between">
+                      <div className="text-xs text-[#e30613]">{matchDate} · {wycHome ? 'Home' : 'Away'}</div>
+                      <div className={`text-lg font-bold tabular-nums ${resultColor}`} aria-hidden="true">
+                        {reverseFixture.home.score} – {reverseFixture.away.score}
+                      </div>
+                      {result && (
+                        <span aria-hidden="true" className={`text-xs font-bold px-2 py-0.5 rounded-full border ${
+                          result === 'W' ? 'bg-green-500/10 border-green-500/30 text-green-400' :
+                          result === 'L' ? 'bg-red-500/10 border-red-500/30 text-red-400' :
+                          'bg-amber-400/10 border-amber-400/30 text-amber-400'
+                        }`}>{result}</span>
+                      )}
                     </div>
-                    {result && (
-                      <span aria-hidden="true" className={`text-xs font-bold px-2 py-0.5 rounded-full border ${
-                        result === 'W' ? 'bg-green-500/10 border-green-500/30 text-green-400' :
-                        result === 'L' ? 'bg-red-500/10 border-red-500/30 text-red-400' :
-                        'bg-amber-400/10 border-amber-400/30 text-amber-400'
-                      }`}>{result}</span>
-                    )}
+                    {(reverseGoals.length > 0 || reverseReds.length > 0) && (() => {
+                      const homeColor = reverseFixture.home.id === TEAM_ESPN_ID ? '#e30613' : accentColor
+                      const awayColor = reverseFixture.away.id === TEAM_ESPN_ID ? '#e30613' : accentColor
+                      const renderColumn = (teamId: string, teamColor: string) => {
+                        const teamGoals = reverseGoals.filter(e => e.teamId === teamId)
+                        const teamReds = reverseReds.filter(e => e.teamId === teamId)
+                        const grouped = new Map<string, { type: string; minutes: string[] }>()
+                        for (const e of teamGoals) {
+                          const name = e.playerName ?? 'Unknown'
+                          if (!grouped.has(name)) grouped.set(name, { type: e.type, minutes: [] })
+                          grouped.get(name)!.minutes.push(e.minute)
+                        }
+                        return (
+                          <div className="space-y-0.5">
+                            {[...grouped.entries()].map(([name, { type, minutes }], i) => (
+                              <div key={i} className="flex items-baseline gap-1 text-xs">
+                                <span aria-hidden="true" className="shrink-0">{type === 'ownGoal' ? '⚽ OG' : type === 'penalty' ? '⚽ P' : '⚽'}</span>
+                                <span className="font-medium" style={{ color: teamColor }}>{name}</span>
+                                <span className="opacity-70 shrink-0" style={{ color: teamColor }}>{minutes.join(', ')}</span>
+                              </div>
+                            ))}
+                            {teamReds.map((e, i) => (
+                              <div key={`r${i}`} className="flex items-baseline gap-1 text-xs">
+                                <span aria-hidden="true" className="shrink-0">🟥</span>
+                                <span className="font-medium text-red-400">{e.playerName ?? 'Unknown'}</span>
+                                <span className="opacity-70 shrink-0 text-red-400">{e.minute}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )
+                      }
+                      return (
+                        <div className="mt-2 pt-2 border-t border-[#e30613]/10 grid grid-cols-2 gap-x-3">
+                          {renderColumn(reverseFixture.home.id, homeColor)}
+                          {renderColumn(reverseFixture.away.id, awayColor)}
+                        </div>
+                      )
+                    })()}
                   </div>
                 </div>
               )

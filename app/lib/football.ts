@@ -15,6 +15,14 @@ async function espnFetch(url: string, revalidate = 1800) {
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
+export interface MatchEvent {
+  minute: string
+  teamId: string
+  teamName: string
+  type: 'goal' | 'ownGoal' | 'penalty' | 'redCard' | 'yellowRed'
+  playerName?: string
+}
+
 export interface Fixture {
   id: string
   date: string
@@ -109,11 +117,14 @@ export async function getFixtures(): Promise<Fixture[]> {
     .filter(Boolean)
     .map((f: Fixture) => ({ ...f, status: 'finished' as const }))
 
-  // Upcoming fixtures: scoreboard from today to end of season, filtered to Wycombe
+  // Scoreboard from 60 days ago to end of season — captures any recent games
+  // the schedule endpoint misses (it caps at ~31 results)
   const now = new Date()
-  const seasonEnd = new Date(now.getFullYear(), 4, 15) // ~15 May
+  const lookback = new Date(now)
+  lookback.setDate(lookback.getDate() - 60)
+  const seasonEnd = new Date(now.getFullYear(), 4, 31) // end of May
   const fmt = (d: Date) => d.toISOString().slice(0, 10).replace(/-/g, '')
-  const url = `${SITE_API}/scoreboard?dates=${fmt(now)}-${fmt(seasonEnd)}&limit=200`
+  const url = `${SITE_API}/scoreboard?dates=${fmt(lookback)}-${fmt(seasonEnd)}&limit=200`
   const upcomingData = await espnFetch(url, 900)
   const upcomingFixtures: Fixture[] = (upcomingData?.events ?? [])
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -260,11 +271,40 @@ export async function getStadiumImage(): Promise<string | null> {
   }
 }
 
+async function getMatchEvents(eventId: string): Promise<MatchEvent[]> {
+  const data = await espnFetch(`${SITE_API}/summary?event=${eventId}`, 3600)
+  if (!data) return []
+
+  const events: MatchEvent[] = []
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  for (const e of (data.keyEvents ?? []) as any[]) {
+    const typeSlug: string = e.type?.type ?? ''
+    const clock: string = e.clock?.displayValue ?? ''
+    const teamId: string = e.team?.id ?? ''
+    const teamName: string = e.team?.displayName ?? ''
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const playerName: string | undefined = (e.participants as any[])?.[0]?.athlete?.displayName ?? undefined
+
+    if (e.scoringPlay) {
+      const isOwn = typeSlug.includes('own')
+      const isPen = typeSlug.includes('penalty')
+      events.push({ minute: clock, teamId, teamName, type: isOwn ? 'ownGoal' : isPen ? 'penalty' : 'goal', playerName })
+    } else if (typeSlug === 'red-card') {
+      events.push({ minute: clock, teamId, teamName, type: 'redCard', playerName })
+    } else if (typeSlug === 'second-yellow' || typeSlug === 'yellow-red') {
+      events.push({ minute: clock, teamId, teamName, type: 'yellowRed', playerName })
+    }
+  }
+
+  return events
+}
+
 export interface OppositionData {
   recentResults: Fixture[]   // last 10 finished, sorted newest-first
   topScorers: Player[]       // sorted by goals desc
   topAssists: Player[]       // sorted by assists desc
   reverseFixture: Fixture | null  // already-played game vs Wycombe this season
+  reverseFixtureEvents: MatchEvent[]
 }
 
 export async function getOppositionData(teamId: string): Promise<OppositionData | null> {
@@ -322,5 +362,7 @@ export async function getOppositionData(teamId: string): Promise<OppositionData 
     .sort((a: Player, b: Player) => b.assists - a.assists)
     .slice(0, 5)
 
-  return { recentResults, topScorers, topAssists, reverseFixture }
+  const reverseFixtureEvents = reverseFixture ? await getMatchEvents(reverseFixture.id) : []
+
+  return { recentResults, topScorers, topAssists, reverseFixture, reverseFixtureEvents }
 }
